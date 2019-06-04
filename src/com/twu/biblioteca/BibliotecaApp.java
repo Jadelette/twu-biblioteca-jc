@@ -4,8 +4,8 @@ public class BibliotecaApp {
 
     public static void main(String[] args) {
 
-        UI ui = new UI();
+        UI ui = new UI(System.out);
 
-        ui.displayWelcome(System.out);
+        ui.displayWelcome();
     }
 }

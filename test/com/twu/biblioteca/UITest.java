@@ -17,9 +17,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import static org.junit.Assert.assertEquals;
+
 
 
 public class UITest {
@@ -30,13 +33,13 @@ public class UITest {
     @Before
     public void setUp() {
         printStream = mock(PrintStream.class);
-        ui = new UI();
+        ui = new UI(printStream);
     }
 
     @Test
     public void welcomeMessageReturnsCorrectString() {
         //when
-        ui.displayWelcome(printStream);
+        ui.displayWelcome();
         //then
         verify(printStream).println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
     }
