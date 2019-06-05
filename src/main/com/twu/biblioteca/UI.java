@@ -1,5 +1,7 @@
 package com.twu.biblioteca;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
@@ -9,15 +11,15 @@ import java.util.*;
 public class UI {
 
     private PrintStream printStream;
-   // private Scanner scanner;
+    TreeMap<String, Method> optionsMenu;
 
 
 
 
-    public UI(PrintStream printStream) {
+
+    public UI(PrintStream printStream) throws NoSuchMethodException {
         this.printStream = printStream;
-        //this.scanner = scanner;
-
+        optionsMenu = OptionsMenu.getOptionsMenu();
     }
 
 
@@ -33,22 +35,40 @@ public class UI {
     }
 
     public void displayOptions() throws NoSuchMethodException {
-        TreeMap<String, Method> optionsMenu = OptionsMenu.getOptionsMenu();
         for (String option : optionsMenu.keySet()) {
         printStream.println(option + "\n");}
     }
 
-
-    public String askForUserChoice(Scanner scanner) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        printStream.println("Menu");
-        displayOptions();
-        printStream.println("Type the corresponding number to select a menu option: ");
-
-        String input = scanner.nextLine();
-        printStream.println("You selected option: " + input);
-
-        return input;
+    private ArrayList<String> generateListOfMenuNumbers() {
+        Set<String> options = optionsMenu.keySet();
+        ArrayList<String> optionNumbers = new ArrayList<>();
+        for (String option : options) {
+            char temp = option.charAt(0);
+            optionNumbers.add(Character.toString(temp));
+        }
+        return optionNumbers;
     }
 
+
+    public String askForUserChoice(Scanner scanner) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        ArrayList<String> optionNumbers = generateListOfMenuNumbers();
+        Boolean proceed = false;
+        String input;
+
+            printStream.println("Menu");
+            displayOptions();
+            printStream.println("Type the corresponding number to select a menu option: ");
+
+            do {input = scanner.nextLine();
+
+            if (optionNumbers.contains(input)) {
+                printStream.println("You selected option: " + input);
+                proceed = true;
+            } else {
+                printStream.println("Please select a valid option and try again");
+            }
+        } while (proceed == false);
+        return input;
+    }
 
 }
