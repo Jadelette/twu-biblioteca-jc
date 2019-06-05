@@ -54,21 +54,25 @@ public class UI {
         ArrayList<String> optionNumbers = generateListOfMenuNumbers();
         Boolean proceed = false;
         String input;
-
             printStream.println("Menu");
             displayOptions();
             printStream.println("Type the corresponding number to select a menu option: ");
-
-            do {input = scanner.nextLine();
-
-            if (optionNumbers.contains(input)) {
-                printStream.println("You selected option: " + input);
+            do {
+                input = scanner.nextLine();
+                if (input.equals("q")) {
+                    displayGoodbyeMessage();
+                    return input;
+                } else if (optionNumbers.contains(input)) {
                 proceed = true;
-            } else {
-                printStream.println("Please select a valid option and try again");
-            }
-        } while (proceed == false);
+                }else {
+                    printStream.println("Please select a valid option and try again");
+                }
+            } while (proceed == false);
         return input;
+    }
+
+    public void displayGoodbyeMessage(){
+        printStream.println("Thank you for using Biblioteca! We look forward to seeing you again!");
     }
 
 }
