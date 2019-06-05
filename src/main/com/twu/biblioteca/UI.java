@@ -1,19 +1,22 @@
 package com.twu.biblioteca;
 
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 public class UI {
 
     private PrintStream printStream;
-    //private TreeMap<String, Method> optionsMenu;
+   // private Scanner scanner;
+
+
 
 
     public UI(PrintStream printStream) {
         this.printStream = printStream;
+        //this.scanner = scanner;
 
     }
 
@@ -32,6 +35,20 @@ public class UI {
     public void displayOptions() throws NoSuchMethodException {
         TreeMap<String, Method> optionsMenu = OptionsMenu.getOptionsMenu();
         for (String option : optionsMenu.keySet()) {
-        printStream.println(option);}
+        printStream.println(option + "\n");}
     }
+
+
+    public String askForUserChoice(Scanner scanner) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        printStream.println("Menu");
+        displayOptions();
+        printStream.println("Type the corresponding number to select a menu option: ");
+
+        String input = scanner.nextLine();
+        printStream.println("You selected option: " + input);
+
+        return input;
+    }
+
+
 }

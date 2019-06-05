@@ -6,31 +6,22 @@ import java.util.*;
 
 public class BibliotecaApp {
 
-    public static void main(String[] args) throws NoSuchMethodException {
+    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
-
+        Scanner scanner = new Scanner(System.in);
         UI ui = new UI(System.out);
 
+        Book catch22 = new Book("Catch 22", "Joseph Heller", 1961);
+        Book hhgttg = new Book ("Hitchhiker's Guide to the Galaxy", "Douglas Adams", 1992);
+        Book fMrFox = new Book ("Fantastic Mr Fox", "Roald Dahl", 1970);
+
+        StockManager.addBookToStock(catch22);
+        StockManager.addBookToStock(hhgttg);
+        StockManager.addBookToStock(fMrFox);
 
         ui.displayWelcome();
-        ui.displayOptions();
 
-
-  /*
-        int input = 1;
-        String stringifiedInput = Integer.toString(input);
-        for (Map.Entry<String, Method> entry : optionsMenu.entrySet()){
-            if (entry.getKey().contains(stringifiedInput)){
-                String cmd = entry.getKey();
-            switch (input){
-                case 1: optionsMenu.get(cmd).invoke(ui, books);
-                break;
-                case 2: optionsMenu.get(cmd).invoke(ui, null);
-                break;
-                }
-            }
-        }
-*/
+        OptionsMenu.invokeMenuOption(ui, scanner);
 
     }
 }

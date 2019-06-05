@@ -6,8 +6,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -30,6 +33,7 @@ import static org.junit.Assert.assertEquals;
 public class UITest {
 
     private PrintStream printStream;
+    private InputStream inputStream;
     private UI ui;
 
     Book catch22 = new Book("Catch 22", "Joseph Heller", 1961);
@@ -75,11 +79,25 @@ public class UITest {
     @Test
     public void menuOptionsDisplayedToUser() throws NoSuchMethodException {
         //given - set-up
-        String result = "1 - View Books";
+        String result = "1 - View Books\n";
         //when
         ui.displayOptions();
         //then
         verify(printStream).println(result);
+    }
+
+    @Test
+    public void userCanInputASelection() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //given
+        String input = "test";
+        inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        Scanner mockScanner = new Scanner(System.in);
+
+        //when
+        ui.askForUserChoice(mockScanner);
+
+        verify(printStream).println("You selected option: " + input);
     }
 
 }
