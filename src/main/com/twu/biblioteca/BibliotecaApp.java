@@ -1,25 +1,36 @@
 package com.twu.biblioteca;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class BibliotecaApp {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchMethodException {
+
 
         UI ui = new UI(System.out);
 
-        Book catch22 = new Book("Catch 22", "Joseph Heller", 1961);
-        Book hhgttg = new Book ("Hitchhiker's Guide to the Galaxy", "Douglas Adams", 1992);
-        Book fMrFox = new Book ("Fantastic Mr Fox", "Roald Dahl", 1970);
-
-        List<Book> books = new ArrayList<Book>();
-        books.add(catch22);
-        books.add(hhgttg);
-        books.add(fMrFox);
-
 
         ui.displayWelcome();
-        ui.displayBooks(books);
+        ui.displayOptions();
+
+
+  /*
+        int input = 1;
+        String stringifiedInput = Integer.toString(input);
+        for (Map.Entry<String, Method> entry : optionsMenu.entrySet()){
+            if (entry.getKey().contains(stringifiedInput)){
+                String cmd = entry.getKey();
+            switch (input){
+                case 1: optionsMenu.get(cmd).invoke(ui, books);
+                break;
+                case 2: optionsMenu.get(cmd).invoke(ui, null);
+                break;
+                }
+            }
+        }
+*/
+
     }
 }
