@@ -89,15 +89,15 @@ public class UITest {
     @Test
     public void userCanInputASelection() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //given
-        String input = "test";
+        String input = "1";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         Scanner mockScanner = new Scanner(System.in);
 
         //when
-        ui.askForUserChoice(mockScanner);
+        String result = ui.getUserInput(mockScanner);
 
-        verify(printStream).println("You selected option: " + input);
+        assertThat(result, is("1"));
     }
 
 }

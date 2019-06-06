@@ -50,22 +50,22 @@ public class UI {
     }
 
 
-    public String askForUserChoice(Scanner scanner) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public String getUserInput(Scanner scanner) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         ArrayList<String> optionNumbers = generateListOfMenuNumbers();
         Boolean proceed = false;
         String input;
             printStream.println("Menu");
             displayOptions();
-            printStream.println("Type the corresponding number to select a menu option: ");
+            printStream.println("Type the corresponding number to select a menu option, or type 'x' to exit: ");
             do {
                 input = scanner.nextLine();
-                if (input.equals("q")) {
+                if (input.equals("x")) {
                     displayGoodbyeMessage();
                     return input;
                 } else if (optionNumbers.contains(input)) {
                 proceed = true;
                 }else {
-                    printStream.println("Please select a valid option and try again");
+                    printStream.println("Please select a valid option and try again:");
                 }
             } while (proceed == false);
         return input;

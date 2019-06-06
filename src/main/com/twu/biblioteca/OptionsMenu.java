@@ -15,6 +15,7 @@ public class OptionsMenu {
 
     public static void populateOptions() throws NoSuchMethodException {
         optionsMenu.put("1 - View Books", UI.class.getMethod("displayBooks"));
+        //add additional menu options here
     }
 
     public static TreeMap<String, Method> getOptionsMenu() throws NoSuchMethodException {
@@ -23,12 +24,13 @@ public class OptionsMenu {
     }
 
     public static void invokeMenuOption(UI ui, Scanner scanner) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        String input = "";
+        String input;
+        Boolean proceed = true;
 
-        while (!input.equals("q")) {
-            input = ui.askForUserChoice(scanner);
-            if (input.equals("q")) {
-                return;
+        while (proceed==true) {
+            input = ui.getUserInput(scanner);
+            if (input.equals("x")) {
+                proceed = false;
             } else {
                 for (Map.Entry<String, Method> entry : optionsMenu.entrySet()) {
                     if (entry.getKey().contains(input)) {
