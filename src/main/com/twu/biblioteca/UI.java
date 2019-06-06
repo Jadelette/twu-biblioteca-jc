@@ -1,8 +1,5 @@
 package com.twu.biblioteca;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,11 +8,7 @@ import java.util.*;
 public class UI {
 
     private PrintStream printStream;
-    TreeMap<String, Method> optionsMenu;
-
-
-
-
+    private Map<String, Method> optionsMenu;
 
     public UI(PrintStream printStream) throws NoSuchMethodException {
         this.printStream = printStream;
@@ -34,7 +27,7 @@ public class UI {
         }
     }
 
-    public void displayOptions() throws NoSuchMethodException {
+    public void displayOptions() {
         for (String option : optionsMenu.keySet()) {
         printStream.println(option + "\n");}
     }
@@ -50,9 +43,9 @@ public class UI {
     }
 
 
-    public String askForUserChoice(Scanner scanner) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public String askForUserChoice(Scanner scanner) {
         ArrayList<String> optionNumbers = generateListOfMenuNumbers();
-        Boolean proceed = false;
+        boolean proceed = false;
         String input;
             printStream.println("Menu");
             displayOptions();

@@ -8,6 +8,7 @@ import org.mockito.Matchers;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -21,7 +22,7 @@ public class OptionsMenuTest {
     @Test
     public void checkThatGetOptionsMenuReturnsPopulatedMenu() throws NoSuchMethodException {
         //when
-        TreeMap<String, Method> result = OptionsMenu.getOptionsMenu();
+        Map<String, Method> result = OptionsMenu.getOptionsMenu();
         //then
         assertThat(result.keySet(), hasItem("1 - View Books"));
     }
