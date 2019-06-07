@@ -1,11 +1,9 @@
 package com.twu.biblioteca;
 
 
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,6 +17,16 @@ import static org.mockito.Mockito.*;
 
 
 public class OptionsMenuTest {
+    private Scanner scanner;
+    private UI ui;
+    private PrintStream printStream;
+
+    @Before
+    public void setUp() throws NoSuchMethodException {
+        scanner = new Scanner(System.in);
+        printStream = mock(PrintStream.class);
+        ui = spy(new UI(printStream, scanner));
+    }
 
 
     @Test
@@ -32,8 +40,6 @@ public class OptionsMenuTest {
     @Test
     public void checkThatSystemExitsIfUserChoosesX() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         //given a scanner input
-        PrintStream printStream = mock(PrintStream.class);
-        UI ui = new UI(printStream);
         String input = "x";
 
         //when invokeMethod is called
@@ -41,14 +47,13 @@ public class OptionsMenuTest {
 
         //check that correct value is returned to stop loop in main
         assertThat(result, is(false));
+        verify(ui).displayGoodbyeMessage();
     }
 
     @Test
     //cannot verify print statements beyond user choice/invoke method call?
     public void checkThatSystemInvokesCorrectMethodBasedOnUserChoice() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         //given a scanner input
-        PrintStream printStream = mock(PrintStream.class);
-        UI ui = spy(new UI(printStream));
         String input= "1";
 
         //when invokeMethod is called

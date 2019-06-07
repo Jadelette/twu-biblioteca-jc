@@ -2,32 +2,20 @@ package com.twu.biblioteca;
 
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.List;
+import java.util.Scanner;
+import java.util.TreeMap;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
 import static org.mockito.Mockito.*;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.internal.matchers.And;
-import org.mockito.runners.MockitoJUnitRunner;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import static org.junit.Assert.assertEquals;
 
 
 public class UITest {
@@ -35,6 +23,7 @@ public class UITest {
     private PrintStream printStream;
     private InputStream inputStream;
     private UI ui;
+    private Scanner mockScanner;
 
     Book catch22 = new Book("Catch 22", "Joseph Heller", 1961);
     Book hhgttg = new Book ("Hitchhiker's Guide to the Galaxy", "Douglas Adams", 1992);
@@ -47,7 +36,8 @@ public class UITest {
     @Before
     public void setUp() throws NoSuchMethodException {
         printStream = mock(PrintStream.class);
-        ui = spy(new UI(printStream));
+        mockScanner = new Scanner(System.in);
+        ui = spy(new UI(printStream, mockScanner));
         StockManager.addBookToStock(catch22);
         StockManager.addBookToStock(hhgttg);
         StockManager.addBookToStock(fMrFox);
@@ -92,29 +82,14 @@ public class UITest {
         String input = "1";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
-        Scanner mockScanner = new Scanner(System.in);
-
+        mockScanner = new Scanner(System.in);
+        ui = new UI(printStream, mockScanner);
         //when
-        String result = ui.getUserInput(mockScanner);
-
+        String result = ui.getUserInput();
+        //then
         assertThat(result, is("1"));
     }
-
-
-    @Test
-    public void ifUserEntersXDisplayGoodbyeMessageIsCalled() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        //given
-        String input = "x";
-        inputStream = new ByteArrayInputStream(input.getBytes());
-        System.setIn(inputStream);
-        Scanner mockScanner = new Scanner(System.in);
-
-        //when
-        String result = ui.getUserInput(mockScanner);
-        //then (check that returned input value is correct and correct method called)
-        assertThat(result, is("x"));
-        verify(ui).displayGoodbyeMessage();
-    }
+    
 
     @Test
     public void checkThatGoodbyeMessageDisplaysCorrectly() {

@@ -12,13 +12,12 @@ public class UI {
 
     private PrintStream printStream;
     TreeMap<String, Method> optionsMenu;
+    private Scanner scanner;
 
 
-
-
-
-    public UI(PrintStream printStream) throws NoSuchMethodException {
+    public UI(PrintStream printStream, Scanner scanner) throws NoSuchMethodException {
         this.printStream = printStream;
+        this.scanner = scanner;
         optionsMenu = OptionsMenu.getOptionsMenu();
     }
 
@@ -36,39 +35,16 @@ public class UI {
     }
 
     public void displayOptions() throws NoSuchMethodException {
+        printStream.println("Menu");
         for (String option : optionsMenu.keySet()) {
         printStream.println(option + "\n");}
-    }
-
-    private ArrayList<String> generateListOfMenuNumbers() {
-        Set<String> options = optionsMenu.keySet();
-        ArrayList<String> optionNumbers = new ArrayList<>();
-        for (String option : options) {
-            char temp = option.charAt(0);
-            optionNumbers.add(Character.toString(temp));
-        }
-        return optionNumbers;
+        printStream.println("Type the corresponding number to select a menu option, or type 'x' to exit: ");
     }
 
 
-    public String getUserInput(Scanner scanner) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        ArrayList<String> optionNumbers = generateListOfMenuNumbers();
-        Boolean proceed = false;
+    public String getUserInput()  {
         String input;
-            printStream.println("Menu");
-            displayOptions();
-            printStream.println("Type the corresponding number to select a menu option, or type 'x' to exit: ");
-            do {
-                input = scanner.nextLine();
-                if (input.equals("x")) {
-                    displayGoodbyeMessage();
-                    return input;
-                } else if (optionNumbers.contains(input)) {
-                proceed = true;
-                }else {
-                    printStream.println("Please select a valid option and try again:");
-                }
-            } while (proceed == false);
+        input = scanner.nextLine();
         return input;
     }
 
