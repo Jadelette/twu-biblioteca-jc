@@ -1,14 +1,11 @@
 package com.twu.biblioteca;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.TreeMap;
 
-public class OptionsMenu {
+class OptionsMenu {
 
     private static TreeMap<String, Method> optionsMenu = new TreeMap<String, Method>();
 
@@ -18,12 +15,12 @@ public class OptionsMenu {
         //add additional menu options here
     }
 
-    public static TreeMap<String, Method> getOptionsMenu() throws NoSuchMethodException {
+    static TreeMap<String, Method> getOptionsMenu() throws NoSuchMethodException {
         populateOptions();
         return optionsMenu;
     }
 
-    public static boolean invokeMenuOption(UI ui, String input) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    static boolean invokeMenuOption(UI ui, String input) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
 
         boolean proceed = true;
 

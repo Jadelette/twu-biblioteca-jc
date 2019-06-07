@@ -2,29 +2,16 @@ package com.twu.biblioteca;
 
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-
-import java.io.PrintStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
-
-import static org.mockito.Mockito.*;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.internal.matchers.And;
-import org.mockito.runners.MockitoJUnitRunner;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import static org.junit.Assert.assertEquals;
 
 
 public class StockMangerTest {
@@ -36,6 +23,7 @@ public class StockMangerTest {
     @Before
     public void setUp() {
     StockManager.clearStock();
+    StockManager.clearReservedList();
     }
 
     @Test
@@ -55,5 +43,36 @@ public class StockMangerTest {
         assertThat(StockManager.getBooksInStock(), hasItem(catch22));
     }
 
+    @Test
+    public void checkThatBookCanBeRemovedFromStock() {
+        //given
+        StockManager.addBookToStock(catch22);
+        StockManager.addBookToStock(fMrFox);
+        StockManager.addBookToStock(hhgttg);
+        //when
+        StockManager.removeBookFromStock(catch22);
+        //then - super thorough test! ^_^
+        assertThat(StockManager.getBooksInStock().size(), is(2));
+        assertThat(StockManager.getBooksInStock(), not(hasItem(catch22)));
+        assertThat(StockManager.getBooksInStock(), hasItem(fMrFox));
+        assertThat(StockManager.getBooksInStock(), hasItem(hhgttg));
+    }
 
+    @Test
+    public void ifNoItemsReservedGetReservedMethodReturnsEmptyList() {
+        //given - setUp
+        //when
+        List<Book> result = StockManager.getReservedBooks();
+        //then
+        assertThat(result.size(), is(0));
+    }
+
+    @Test
+    public void checkThatBookCanBeAddedToReservedBookList() {
+        //given - setUp
+        //when
+        StockManager.addBookToReservedList(catch22);
+        //then
+        assertThat(StockManager.getReservedBooks(), hasItem(catch22));
+    }
 }
