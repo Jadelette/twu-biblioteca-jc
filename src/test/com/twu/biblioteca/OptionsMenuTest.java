@@ -1,28 +1,20 @@
 package com.twu.biblioteca;
 
 
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Matchers;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.*;
 
 
@@ -41,46 +33,29 @@ public class OptionsMenuTest {
     public void checkThatSystemExitsIfUserChoosesX() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         //given a scanner input
         PrintStream printStream = mock(PrintStream.class);
-
-        String input = "x";
-        InputStream inputStream = new ByteArrayInputStream(input.getBytes());
-        System.setIn(inputStream);
-        Scanner mockScanner = new Scanner(System.in);
         UI ui = new UI(printStream);
+        String input = "x";
 
         //when invokeMethod is called
-        OptionsMenu.invokeMenuOption(ui, mockScanner);
+        boolean result = OptionsMenu.invokeMenuOption(ui, input);
 
-        //Then the output is as expected depending on the method/option chosen by tbe user
-        verify(printStream).println("Thank you for using Biblioteca! We look forward to seeing you again!");
+        //check that correct value is returned to stop loop in main
+        assertThat(result, is(false));
     }
 
     @Test
-    @Ignore
-    //gets stuck in loop when scanner prompts for next choice after user selects '1' - not sure how to fix
+    //cannot verify print statements beyond user choice/invoke method call?
     public void checkThatSystemInvokesCorrectMethodBasedOnUserChoice() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         //given a scanner input
         PrintStream printStream = mock(PrintStream.class);
-
-        String input1 = "1";
-        String input2 = "x";
-        InputStream inputStream1 = new ByteArrayInputStream(input1.getBytes());
-        InputStream inputStream2 = new ByteArrayInputStream(input2.getBytes());
-        System.setIn(inputStream1);
-        Scanner mockScanner = new Scanner(System.in);
-        UI ui = new UI(printStream);
-
-
-        String bookTitle = "Catch 22";
-        String bookAuthor = "Joseph Heller";
-        int bookYear = 1961;
+        UI ui = spy(new UI(printStream));
+        String input= "1";
 
         //when invokeMethod is called
-        OptionsMenu.invokeMenuOption(ui, mockScanner);
-
+        OptionsMenu.invokeMenuOption(ui,input);
 
         //Then the output is as expected depending on the method/option chosen by tbe user
-        verify(printStream).printf("%-40.40s %-30.30s  %-30.30s%n", bookTitle, bookAuthor, bookYear);
+        verify(ui).displayBooks();
     }
 
 }

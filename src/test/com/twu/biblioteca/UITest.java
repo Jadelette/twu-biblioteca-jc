@@ -47,7 +47,7 @@ public class UITest {
     @Before
     public void setUp() throws NoSuchMethodException {
         printStream = mock(PrintStream.class);
-        ui = new UI(printStream);
+        ui = spy(new UI(printStream));
         StockManager.addBookToStock(catch22);
         StockManager.addBookToStock(hhgttg);
         StockManager.addBookToStock(fMrFox);
@@ -98,6 +98,31 @@ public class UITest {
         String result = ui.getUserInput(mockScanner);
 
         assertThat(result, is("1"));
+    }
+
+
+    @Test
+    public void ifUserEntersXDisplayGoodbyeMessageIsCalled() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        //given
+        String input = "x";
+        inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        Scanner mockScanner = new Scanner(System.in);
+
+        //when
+        String result = ui.getUserInput(mockScanner);
+        //then (check that returned input value is correct and correct method called)
+        assertThat(result, is("x"));
+        verify(ui).displayGoodbyeMessage();
+    }
+
+    @Test
+    public void checkThatGoodbyeMessageDisplaysCorrectly() {
+        //given - setUp()
+        //when
+        ui.displayGoodbyeMessage();
+        //then
+        verify(printStream).println("Thank you for using Biblioteca! We look forward to seeing you again!");
     }
 
 }

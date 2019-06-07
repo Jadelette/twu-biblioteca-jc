@@ -29,6 +29,7 @@ public class UI {
 
     public void displayBooks() {
         List<Book> books = StockManager.getBooksInStock();
+        printStream.println("The following books are available to borrow:");
         for (Book book : books) {
             printStream.printf("%-40.40s %-30.30s  %-30.30s%n", book.getTitle(), book.getAuthor(), book.getYear());
         }

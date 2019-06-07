@@ -13,7 +13,7 @@ public class OptionsMenu {
     private static TreeMap<String, Method> optionsMenu = new TreeMap<String, Method>();
 
 
-    public static void populateOptions() throws NoSuchMethodException {
+    private static void populateOptions() throws NoSuchMethodException {
         optionsMenu.put("1 - View Books", UI.class.getMethod("displayBooks"));
         //add additional menu options here
     }
@@ -23,12 +23,10 @@ public class OptionsMenu {
         return optionsMenu;
     }
 
-    public static void invokeMenuOption(UI ui, Scanner scanner) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        String input;
-        Boolean proceed = true;
+    public static boolean invokeMenuOption(UI ui, String input) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
 
-        while (proceed==true) {
-            input = ui.getUserInput(scanner);
+        boolean proceed = true;
+
             if (input.equals("x")) {
                 proceed = false;
             } else {
@@ -40,7 +38,8 @@ public class OptionsMenu {
                 }
                 System.out.println("\nPlease select what you would like to do next");
             }
-        }
+
+        return proceed;
     }
 
 }

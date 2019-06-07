@@ -12,8 +12,8 @@ public class BibliotecaApp {
         UI ui = new UI(System.out);
 
         Book catch22 = new Book("Catch 22", "Joseph Heller", 1961);
-        Book hhgttg = new Book ("Hitchhiker's Guide to the Galaxy", "Douglas Adams", 1992);
-        Book fMrFox = new Book ("Fantastic Mr Fox", "Roald Dahl", 1970);
+        Book hhgttg = new Book("Hitchhiker's Guide to the Galaxy", "Douglas Adams", 1992);
+        Book fMrFox = new Book("Fantastic Mr Fox", "Roald Dahl", 1970);
 
         StockManager.addBookToStock(catch22);
         StockManager.addBookToStock(hhgttg);
@@ -21,7 +21,12 @@ public class BibliotecaApp {
 
         ui.displayWelcome();
 
-        OptionsMenu.invokeMenuOption(ui, scanner);
+        boolean proceed = true;
+        while (proceed == true) {
+            String input = ui.getUserInput(scanner);
+            proceed = OptionsMenu.invokeMenuOption(ui, input);
+            }
 
+        }
     }
-}
+
