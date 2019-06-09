@@ -17,9 +17,9 @@ import static org.mockito.Mockito.verify;
 
 public class BookTest {
 
-    Book catch22 = new Book("Catch 22", "Joseph Heller", 1961);
-    Book hhgttg = new Book("Hitchhiker's Guide to the Galaxy", "Douglas Adams", 1992);
-    Book fMrFox = new Book("Fantastic Mr Fox", "Roald Dahl", 1970);
+    Book catch22 = new Book("Catch 22", "Joseph Heller", 1961, "REF#01");
+    Book hhgttg = new Book("Hitchhiker's Guide to the Galaxy", "Douglas Adams", 1992, "REF#02");
+    Book fMrFox = new Book("Fantastic Mr Fox", "Roald Dahl", 1970, "REF#03");
 
 
     @Test

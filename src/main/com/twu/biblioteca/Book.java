@@ -5,11 +5,13 @@ public class Book {
     private String title;
     private String author;
     private int year;
+    private String reference;
 
-    public Book(String title, String author, int year) {
+    public Book(String title, String author, int year, String reference) {
         this.title = title;
         this.author = author;
         this.year = year;
+        this.reference = reference;
     }
 
     public String getTitle() {
@@ -22,5 +24,9 @@ public class Book {
 
     public int getYear() {
         return year;
+    }
+
+    public String getRef(){
+        return reference;
     }
 }

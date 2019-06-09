@@ -1,12 +1,10 @@
 package com.twu.biblioteca;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.io.InputStream;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.List;
+import java.util.Scanner;
+import java.util.TreeMap;
 
 public class UI {
 
@@ -30,11 +28,11 @@ public class UI {
         List<Book> books = StockManager.getBooksInStock();
         printStream.println("The following books are available to borrow:");
         for (Book book : books) {
-            printStream.printf("%-40.40s %-30.30s  %-30.30s%n", book.getTitle(), book.getAuthor(), book.getYear());
+            printStream.printf("%-10.10s %-40.40s %-30.30s  %-30.30s%n", book.getRef(), book.getTitle(), book.getAuthor(), book.getYear());
         }
     }
 
-    public void displayOptions() throws NoSuchMethodException {
+    public void displayOptions()  {
         printStream.println("Menu");
         for (String option : optionsMenu.keySet()) {
         printStream.println(option + "\n");}
@@ -50,6 +48,18 @@ public class UI {
 
     public void displayGoodbyeMessage(){
         printStream.println("Thank you for using Biblioteca! We look forward to seeing you again!");
+    }
+
+    public void reserveBook() {
+        printStream.println("Please type the id for the book you would like to reserve:");
+        String input = getUserInput();
+        List<Book> books = StockManager.getBooksInStock();
+        for (Book book : books){
+            if (book.getRef().contains(input)){
+                StockManager.addBookToReservedList(book);
+            }
+        }
+
     }
 
 }
