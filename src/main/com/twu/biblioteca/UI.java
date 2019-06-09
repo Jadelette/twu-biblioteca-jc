@@ -53,13 +53,10 @@ public class UI {
     public void reserveBook() {
         printStream.println("Please type the id for the book you would like to reserve:");
         String input = getUserInput();
-        List<Book> books = StockManager.getBooksInStock();
-        for (Book book : books){
-            if (book.getRef().contains(input)){
-                StockManager.addBookToReservedList(book);
-            }
+        StockManager.addBookToReservedList(input);
+        StockManager.removeBookFromStock(input);
         }
 
     }
 
-}
+

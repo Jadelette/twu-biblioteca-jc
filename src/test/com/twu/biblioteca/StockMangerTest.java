@@ -50,7 +50,7 @@ public class StockMangerTest {
         StockManager.addBookToStock(fMrFox);
         StockManager.addBookToStock(hhgttg);
         //when
-        StockManager.removeBookFromStock(catch22);
+        StockManager.removeBookFromStock("REF#01");
         //then - super thorough test! ^_^
         assertThat(StockManager.getBooksInStock().size(), is(2));
         assertThat(StockManager.getBooksInStock(), not(hasItem(catch22)));
@@ -71,7 +71,7 @@ public class StockMangerTest {
     public void checkThatBookCanBeAddedToReservedBookList() {
         //given - setUp
         //when
-        StockManager.addBookToReservedList(catch22);
+        StockManager.addBookToReservedList("REF#01");
         //then
         assertThat(StockManager.getReservedBooks(), hasItem(catch22));
     }

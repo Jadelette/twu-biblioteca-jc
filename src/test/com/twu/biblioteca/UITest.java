@@ -120,4 +120,18 @@ public class UITest {
         assertThat(StockManager.getReservedBooks(), hasItem(catch22));
     }
 
+    @Test
+    public void whenUserReservesBookItIsRemovedFromStock() throws NoSuchMethodException {
+        //given - setUp
+        //when
+        String input = "REF#01";
+        inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        mockScanner = new Scanner(System.in);
+        ui = new UI(printStream, mockScanner);
+        ui.reserveBook();
+        //then
+        assertThat(StockManager.getBooksInStock().size(), is(2));
+    }
+
 }
