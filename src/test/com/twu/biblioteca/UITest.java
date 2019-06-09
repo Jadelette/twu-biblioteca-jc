@@ -134,4 +134,30 @@ public class UITest {
         assertThat(StockManager.getBooksInStock().size(), is(2));
     }
 
+    @Test
+    public void whenUserReservesBookSuccessMessagePrinted() throws NoSuchMethodException {
+        //when
+        String input = "REF#01";
+        inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        mockScanner = new Scanner(System.in);
+        ui = new UI(printStream, mockScanner);
+        ui.reserveBook();
+        //then
+        verify(printStream).println("Thank you! Enjoy the book!");
+    }
+
+    @Test
+    public void ifReserveRequestUnsuccessfulUserIsNotified() throws NoSuchMethodException {
+        //when
+        String input = "unknown ref";
+        inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        mockScanner = new Scanner(System.in);
+        ui = new UI(printStream, mockScanner);
+        ui.reserveBook();
+        //then
+        verify(printStream).println("Sorry, that book is not available.");
+    }
+
 }

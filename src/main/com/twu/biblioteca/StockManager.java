@@ -1,8 +1,7 @@
 package com.twu.biblioteca;
 
-import org.omg.CORBA.Object;
-
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
 public class StockManager {
@@ -17,7 +16,7 @@ public class StockManager {
     public static void addBookToStock(Book book) {
         booksInStock.add(book);
     }
-    
+
     public static void removeBookFromStock(String bookRef) {
         for (Book book : reservedBooks) {
             if (book.getRef().contains(bookRef)){
@@ -31,12 +30,17 @@ public class StockManager {
     }
 
     public static void addBookToReservedList(String bookRef){
+        Book bookToReserve = null;
         for (Book book : booksInStock) {
-            if (book.getRef().contains(bookRef)) {
-                reservedBooks.add(book);
+            if (book.getRef().equals(bookRef)) {
+                bookToReserve = book;
             }
         }
-    }
+            if (bookToReserve == null) {throw new InputMismatchException();
+            } else
+                reservedBooks.add(bookToReserve);
+        }
+
 
     public static void clearStock() {
         booksInStock = new ArrayList<>();

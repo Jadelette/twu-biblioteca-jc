@@ -52,11 +52,16 @@ public class UI {
 
     public void reserveBook() {
         printStream.println("Please type the id for the book you would like to reserve:");
-        String input = getUserInput();
-        StockManager.addBookToReservedList(input);
-        StockManager.removeBookFromStock(input);
-        }
 
+        String input = getUserInput();
+        try {
+        StockManager.addBookToReservedList(input);
+        printStream.println("Thank you! Enjoy the book!");}
+        catch (Exception e) {
+            printStream.println("Sorry, that book is not available.");
+        }
+        StockManager.removeBookFromStock(input);
+    }
     }
 
 
