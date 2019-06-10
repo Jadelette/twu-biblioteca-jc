@@ -53,7 +53,7 @@ public class StockMangerTest {
         //when
         StockManager.removeBookFromStock("REF#01");
         //then - super thorough test! ^_^
-       // assertThat(StockManager.getBooksInStock().size(), is(2));
+        assertThat(StockManager.getBooksInStock().size(), is(2));
         assertThat(StockManager.getBooksInStock(), not(hasItem(catch22)));
         assertThat(StockManager.getBooksInStock(), hasItem(fMrFox));
         assertThat(StockManager.getBooksInStock(), hasItem(hhgttg));
@@ -69,7 +69,7 @@ public class StockMangerTest {
     }
 
     @Test
-    public void checkThatBookCanBeAddedToReservedBookList() {
+    public void BookCanBeAddedToReservedBookList() {
         //given - setUp
         StockManager.addBookToStock(catch22);
         StockManager.addBookToStock(fMrFox);
@@ -78,5 +78,38 @@ public class StockMangerTest {
         StockManager.addBookToReservedList("REF#01");
         //then
         assertThat(StockManager.getReservedBooks(), hasItem(catch22));
+    }
+
+    @Test
+    public void BookCanBeRemovedFromReservedList() {
+        //given
+        StockManager.addBookToStock(catch22);
+        StockManager.addBookToStock(fMrFox);
+        StockManager.addBookToStock(hhgttg);
+        StockManager.addBookToReservedList("REF#01");
+        StockManager.addBookToReservedList("REF#02");
+        StockManager.addBookToReservedList("REF#03");
+        //when
+        StockManager.removeBookFromReservedList("REF#01");
+        //then - super thorough test! ^_^
+        assertThat(StockManager.getReservedBooks().size(), is(2));
+        assertThat(StockManager.getReservedBooks(), not(hasItem(catch22)));
+        assertThat(StockManager.getReservedBooks(), hasItem(fMrFox));
+        assertThat(StockManager.getReservedBooks(), hasItem(hhgttg));
+    }
+
+    @Test
+    public void BookCanBeReturnedToStock() {
+        //given - setUp
+        StockManager.addBookToStock(catch22);
+        StockManager.addBookToStock(fMrFox);
+        StockManager.addBookToStock(hhgttg);
+        StockManager.addBookToReservedList("REF#01");
+        StockManager.addBookToReservedList("REF#02");
+        StockManager.addBookToReservedList("REF#03");
+        //when
+        StockManager.returnBookToStock("REF#01");
+        //then
+        assertThat(StockManager.getBooksInStock(), hasItem(catch22));
     }
 }

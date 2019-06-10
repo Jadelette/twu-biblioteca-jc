@@ -36,10 +36,33 @@ public class StockManager {
                 bookToReserve = book;
             }
         }
-            if (bookToReserve == null) {throw new InputMismatchException();
-            } else
-                reservedBooks.add(bookToReserve);
+        if (bookToReserve == null) {throw new InputMismatchException();
+            } else {
+            reservedBooks.add(bookToReserve);
         }
+    }
+
+    public static void removeBookFromReservedList(String bookRef) {
+        for (Book book : booksInStock) {
+            if (book.getRef().contains(bookRef)){
+                reservedBooks.remove(book);
+            }
+        }
+    }
+
+    public static void returnBookToStock(String bookRef){
+        Book bookToReturn = null;
+        for (Book book : reservedBooks) {
+            if (book.getRef().equals(bookRef)) {
+                bookToReturn = book;
+            }
+        }
+        if (bookToReturn == null) {throw new InputMismatchException();
+        } else {
+            booksInStock.add(bookToReturn);
+        }
+    }
+
 
 
     public static void clearStock() {
@@ -49,4 +72,7 @@ public class StockManager {
     public static void clearReservedList() {
         reservedBooks = new ArrayList<>();
     }
+
+
+
 }

@@ -160,4 +160,9 @@ public class UITest {
         verify(printStream).println("Sorry, that book is not available.");
     }
 
+    @Test
+    public void ifBookReturnedItIsRemovedFromReservedList() {
+
+    }
+
 }
