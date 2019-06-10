@@ -15,6 +15,7 @@ class OptionsMenu {
     private static void populateOptions() throws NoSuchMethodException {
         optionsMenu.put("1 - View Books", UI.class.getMethod("displayBooks"));
         optionsMenu.put("2 - Reserve Book", UI.class.getMethod("reserveBook"));
+        optionsMenu.put("3 - Return Book", UI.class.getMethod("returnBook"));
         //add additional menu options here
     }
 

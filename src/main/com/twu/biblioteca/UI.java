@@ -63,13 +63,13 @@ public class UI {
     }
 
     public void returnBook() {
-        printStream.println("Please type the id for the book you would like to reserve:");
+        printStream.println("Please type the id for the book you would like to return:");
         String input = getUserInput();
         try {
             StockManager.returnBookToStock(input);
-            printStream.println("Thank you! Enjoy the book!");}
+            printStream.println("Thank you for returning the book!");}
         catch (Exception e) {
-            printStream.println("Sorry, that book is not available.");
+            printStream.println("That is not a valid book to return.");
         }
         StockManager.removeBookFromReservedList(input);
     }

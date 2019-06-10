@@ -64,7 +64,6 @@ public class StockManager {
     }
 
 
-
     public static void clearStock() {
         booksInStock = new ArrayList<>();
     }
@@ -72,7 +71,5 @@ public class StockManager {
     public static void clearReservedList() {
         reservedBooks = new ArrayList<>();
     }
-
-
 
 }

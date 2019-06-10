@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -104,7 +103,7 @@ public class UITest {
     }
 
     @Test
-    public void whenUserReservesBookItIsAddedToReservedList() throws NoSuchMethodException {
+    public void whenBookISReservedItIsAddedToReservedListAndRemovedFromStock() throws NoSuchMethodException {
         //given - setUp()
         /**There are books available to be reserved**/
         //when
@@ -118,21 +117,11 @@ public class UITest {
         /** the book is added to the reserved book list **/
         assertThat(StockManager.getReservedBooks().size(), is(1));
         assertThat(StockManager.getReservedBooks(), hasItem(catch22));
+        assertThat(StockManager.getBooksInStock().size(), is(2));
+        assertThat(StockManager.getBooksInStock(), not(hasItem(catch22)));
+
     }
 
-    @Test
-    public void whenUserReservesBookItIsRemovedFromStock() throws NoSuchMethodException {
-        //given - setUp
-        //when
-        String input = "REF#01";
-        inputStream = new ByteArrayInputStream(input.getBytes());
-        System.setIn(inputStream);
-        mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner);
-        ui.reserveBook();
-        //then
-        assertThat(StockManager.getBooksInStock().size(), is(2));
-    }
 
     @Test
     public void whenUserReservesBookSuccessMessagePrinted() throws NoSuchMethodException {
@@ -161,8 +150,58 @@ public class UITest {
     }
 
     @Test
-    public void ifBookReturnedItIsRemovedFromReservedList() {
-
+    public void ifBookReturnedItIsAddedToStockAndRemovedFromReservedList() throws NoSuchMethodException {
+        //given - setUp to add book to reserved list - this function has been tested above
+        String input = "REF#01";
+        inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        mockScanner = new Scanner(System.in);
+        ui = new UI(printStream, mockScanner);
+        ui.reserveBook();
+        //when - the returnBook() method is called with the same reference as input
+        String input2 = "REF#01";
+        inputStream = new ByteArrayInputStream(input2.getBytes());
+        System.setIn(inputStream);
+        mockScanner = new Scanner(System.in);
+        ui = new UI(printStream, mockScanner);
+        ui.returnBook();
+        //then
+        assertThat(StockManager.getBooksInStock().size(), is(3));
+        assertThat(StockManager.getReservedBooks().size(), is(0));
     }
+
+    @Test
+    public void whenUserReturnsBookSuccessMessagePrinted() throws NoSuchMethodException {
+        //given - setUp to add book to reserved list - this function has been tested above
+        String input = "REF#01";
+        inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        mockScanner = new Scanner(System.in);
+        ui = new UI(printStream, mockScanner);
+        ui.reserveBook();
+        //when
+        String input2 = "REF#01";
+        inputStream = new ByteArrayInputStream(input2.getBytes());
+        System.setIn(inputStream);
+        mockScanner = new Scanner(System.in);
+        ui = new UI(printStream, mockScanner);
+        ui.returnBook();
+        //then
+        verify(printStream).println("Thank you for returning the book!");
+    }
+
+    @Test
+    public void ifReturnRequestUnsuccessfulUserIsNotified() throws NoSuchMethodException {
+        //when
+        String input = "unknown ref";
+        inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        mockScanner = new Scanner(System.in);
+        ui = new UI(printStream, mockScanner);
+        ui.returnBook();
+        //then
+        verify(printStream).println("That is not a valid book to return.");
+    }
+
 
 }
