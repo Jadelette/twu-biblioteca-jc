@@ -1,0 +1,89 @@
+SQL Queries
+
+Q1. Who checked out the book 'The Hobbit’?
+
+Anand Beck checked out The Hobbit
+
+SQL:
+SELECT member.name, book.title
+FROM checkout_item
+INNER JOIN member on member.id = checkout_item.member_id
+INNER JOIN book on book.id = checkout_item.book_id
+WHERE book.title = "The Hobbit";
+
+
+Q2. How many people have not checked out anything?
+
+37 people have not checked out anything
+
+SELECT count (name)
+FROM member
+LEFT JOIN checkout_item on member.id = checkout_item.member_id
+WHERE member.id NOT IN (SELECT member_id FROM checkout_item);
+
+
+Q3. What books and movies aren't checked out?
+
+SELECT id, title
+FROM book
+LEFT JOIN checkout_item on book_id = id
+ WHERE id NOT IN (SELECT book_id FROM checkout_item WHERE book_id NOTNULL);
+
+Books that aren’t checked out:
+2	Fellowship of the Ring
+6	1984
+7	Tom Sawyer
+8	Catcher in the Rye
+9	To Kill a Mockingbird
+10	Domain Driven Design
+
+SELECT id, title
+FROM movie
+LEFT JOIN checkout_item on movie_id = id
+ WHERE id NOT IN (SELECT movie_id FROM checkout_item WHERE movie_id NOTNULL);
+
+Movies that aren’t checked out:
+6	Thin Red Line
+7	Crouching Tiger, Hidden Dragon
+8	Lawrence of Arabia
+9	Office Space
+
+**I couldn’t get books and movies in a single query. Not sure if this is possible, as sqlite doesn’t support right/outer joins
+
+ 
+Q4. Add the book 'The Pragmatic Programmer',
+INSERT INTO book (title)
+VALUES (“The Pragmatic Programmer“);
+
+and add yourself as a member.
+INSERT INTO member (name)
+VALUES ("Jade Corcoran");
+
+Check out 'The Pragmatic Programmer'.
+INSERT INTO checkout_item (member_id, book_id)
+VALUES (43, 11);
+
+Use your query from question 1 to verify that you have checked it out.
+
+SELECT member.name, book.title
+FROM checkout_item
+INNER JOIN member on member.id = checkout_item.member_id
+INNER JOIN book on book.id = checkout_item.book_id
+WHERE book.title = "The Pragmatic Programmer";
+
+Result:
+Jade Corcoran	The Pragmatic Programmer
+
+
+Q5. Who has checked out more that 1 item?
+Tip: Research the GROUP BY syntax.
+
+SELECT name, COUNT (movie_id) as movies, COUNT (book_id) as books
+FROM checkout_item
+LEFT JOIN member on member_id = member.id
+GROUP BY member_id
+HAVING movies>1 or books>1 or movies=1 and books=1;
+
+NAME	MOVIES	BOOKS
+Anand Beck	1	2
+Frank Smith	2	1
