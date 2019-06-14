@@ -1,7 +1,6 @@
 package com.twu.biblioteca;
 
 import java.io.PrintStream;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -11,6 +10,7 @@ public class UI {
     private PrintStream printStream;
     private Scanner scanner;
     private OptionsMenu optionsMenu;
+    private StockManager stockManager = new StockManager();
 
 
     public UI(PrintStream printStream, Scanner scanner, OptionsMenu optionsMenu) {
@@ -25,9 +25,9 @@ public class UI {
     }
 
     public void displayBooks() {
-        List<Book> books = StockManager.getBooksInStock();
+        List<StockType> books = stockManager.getStock();
         printStream.println("The following books are available to borrow:");
-        for (Book book : books) {
+        for (StockType book : books) {
             printStream.printf("%-10.10s %-40.40s %-30.30s  %-30.30s%n", book.getRef(), book.getTitle(), book.getAuthor(), book.getYear());
         }
     }
@@ -55,24 +55,24 @@ public class UI {
         printStream.println("Please type the id for the book you would like to reserve:");
         String input = getUserInput();
         try {
-        StockManager.addBookToReservedList(input);
+        stockManager.addItemToReservedList(input);
         printStream.println("Thank you! Enjoy the book!");}
         catch (Exception e) {
             printStream.println("Sorry, that book is not available.");
         }
-        StockManager.removeBookFromStock(input);
+        stockManager.removeItemFromStock(input);
     }
 
     public void returnBook() {
         printStream.println("Please type the id for the book you would like to return:");
         String input = getUserInput();
         try {
-            StockManager.returnBookToStock(input);
+            stockManager.returnItemToStock(input);
             printStream.println("Thank you for returning the book!");}
         catch (Exception e) {
             printStream.println("That is not a valid book to return.");
         }
-        StockManager.removeBookFromReservedList(input);
+        stockManager.removeItemFromReservedList(input);
     }
 
 }

@@ -6,70 +6,72 @@ import java.util.List;
 
 public class StockManager {
 
-    private static List<Book> booksInStock = new ArrayList<>();
-    private static List<Book> reservedBooks = new ArrayList<>();
+    private List<StockType> Stock = new ArrayList<>();
+    private List<StockType> reservedItems = new ArrayList<>();
 
-    public static List<Book>getBooksInStock() {
-        return booksInStock;
+    public StockManager( ) { }
+
+    public  List<StockType>getStock() {
+        return Stock;
     }
 
-    public static void addBookToStock(Book book) {
-        booksInStock.add(book);
+    public  void addItemToStock(StockType item) {
+        Stock.add(item);
     }
 
-    public static void removeBookFromStock(String bookRef) {
-        for (Book book : reservedBooks) {
-            if (book.getRef().contains(bookRef)){
-                booksInStock.remove(book);
+    public  void removeItemFromStock(String ref) {
+        for (StockType item : reservedItems) {
+            if (item.getRef().contains(ref)){
+                Stock.remove(item);
             }
         }
     }
 
-    public static List<Book> getReservedBooks(){
-        return reservedBooks;
+    public List<StockType> getReservedItems(){
+        return reservedItems;
     }
 
-    public static void addBookToReservedList(String bookRef){
-        Book bookToReserve = null;
-        for (Book book : booksInStock) {
-            if (book.getRef().equals(bookRef)) {
-                bookToReserve = book;
+    public void addItemToReservedList(String ref){
+        StockType itemToReserve = null;
+        for (StockType item : Stock) {
+            if (item.getRef().equals(ref)) {
+                itemToReserve = item;
             }
         }
-        if (bookToReserve == null) {throw new InputMismatchException();
+        if (itemToReserve == null) {throw new InputMismatchException();
             } else {
-            reservedBooks.add(bookToReserve);
+            reservedItems.add(itemToReserve);
         }
     }
 
-    public static void removeBookFromReservedList(String bookRef) {
-        for (Book book : booksInStock) {
-            if (book.getRef().contains(bookRef)){
-                reservedBooks.remove(book);
+    public void removeItemFromReservedList(String ref) {
+        for (StockType item : Stock) {
+            if (item.getRef().contains(ref)){
+                reservedItems.remove(item);
             }
         }
     }
 
-    public static void returnBookToStock(String bookRef){
-        Book bookToReturn = null;
-        for (Book book : reservedBooks) {
-            if (book.getRef().equals(bookRef)) {
-                bookToReturn = book;
+    public void returnItemToStock(String ref){
+        StockType itemToReturn = null;
+        for (StockType book : reservedItems) {
+            if (book.getRef().equals(ref)) {
+                itemToReturn = book;
             }
         }
-        if (bookToReturn == null) {throw new InputMismatchException();
+        if (itemToReturn == null) {throw new InputMismatchException();
         } else {
-            booksInStock.add(bookToReturn);
+            Stock.add(itemToReturn);
         }
     }
 
 
-    public static void clearStock() {
-        booksInStock = new ArrayList<>();
+    public void clearStock() {
+        Stock = new ArrayList<>();
     }
 
-    public static void clearReservedList() {
-        reservedBooks = new ArrayList<>();
+    public void clearReservedList() {
+        reservedItems = new ArrayList<>();
     }
 
 }

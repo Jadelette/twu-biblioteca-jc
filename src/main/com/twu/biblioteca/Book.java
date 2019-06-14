@@ -1,6 +1,6 @@
 package com.twu.biblioteca;
 
-public class Book {
+public class Book implements StockType {
 
     private String title;
     private String author;
@@ -14,18 +14,22 @@ public class Book {
         this.reference = reference;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public String getAuthor() {
         return author;
     }
 
+    @Override
     public int getYear() {
         return year;
     }
 
+    @Override
     public String getRef(){
         return reference;
     }

@@ -7,8 +7,6 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -37,17 +35,19 @@ public class UITest {
 
     OptionsMenu optionsMenu = new OptionsMenu(options, mockScanner);
 
+    StockManager stockManager = new StockManager();
+
 
     @Before
     public void setUp() {
         printStream = mock(PrintStream.class);
         mockScanner = new Scanner(System.in);
         ui = spy(new UI(printStream, mockScanner, optionsMenu));
-        StockManager.clearStock();
-        StockManager.addBookToStock(catch22);
-        StockManager.addBookToStock(hhgttg);
-        StockManager.addBookToStock(fMrFox);
-        StockManager.clearReservedList();
+        stockManager.clearStock();
+        stockManager.addItemToStock(catch22);
+        stockManager.addItemToStock(hhgttg);
+        stockManager.addItemToStock(fMrFox);
+        stockManager.clearReservedList();
 
         options.put("1 - View Books", viewer);
         options.put("2 - Reserve Book", reserver);
@@ -67,16 +67,16 @@ public class UITest {
     @Test
     public void listOfAvailableBooksDisplayedToUser(){
         //given - set-up
-        List<Book> books = StockManager.getBooksInStock();
+        List<StockType> books = stockManager.getStock();
         // when
         ui.displayBooks();
         //then
-        for (Book book : books) {
+        for (StockType book : books) {
         verify(printStream).printf("%-10.10s %-40.40s %-30.30s  %-30.30s%n", book.getRef(), book.getTitle(), book.getAuthor(), book.getYear());}
     }
 
     @Test
-    public void menuOptionsDisplayedToUser() throws NoSuchMethodException {
+    public void menuOptionsDisplayedToUser() {
         //given - set-up
         String result = "1 - View Books\n";
         //when
@@ -86,7 +86,7 @@ public class UITest {
     }
 
     @Test
-    public void userCanInputASelection() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void userCanInputASelection() {
         //given
         String input = "1";
         inputStream = new ByteArrayInputStream(input.getBytes());
@@ -110,7 +110,7 @@ public class UITest {
     }
 
     @Test
-    public void whenBookISReservedItIsAddedToReservedListAndRemovedFromStock() throws NoSuchMethodException {
+    public void whenBookISReservedItIsAddedToReservedListAndRemovedFromStock() {
         //given - setUp()
         /**There are books available to be reserved**/
         //when
@@ -122,16 +122,16 @@ public class UITest {
         ui.reserveBook();
         //then
         /** the book is added to the reserved book list **/
-        assertThat(StockManager.getReservedBooks().size(), is(1));
-        assertThat(StockManager.getReservedBooks(), hasItem(catch22));
-        assertThat(StockManager.getBooksInStock().size(), is(2));
-        assertThat(StockManager.getBooksInStock(), not(hasItem(catch22)));
+        assertThat(stockManager.getReservedItems().size(), is(1));
+        assertThat(stockManager.getReservedItems(), hasItem(catch22));
+        assertThat(stockManager.getStock().size(), is(2));
+        assertThat(stockManager.getStock(), not(hasItem(catch22)));
 
     }
 
 
     @Test
-    public void whenUserReservesBookSuccessMessagePrinted() throws NoSuchMethodException {
+    public void whenUserReservesBookSuccessMessagePrinted() {
         //when
         String input = "REF#01";
         inputStream = new ByteArrayInputStream(input.getBytes());
@@ -144,7 +144,7 @@ public class UITest {
     }
 
     @Test
-    public void ifReserveRequestUnsuccessfulUserIsNotified() throws NoSuchMethodException {
+    public void ifReserveRequestUnsuccessfulUserIsNotified() {
         //when
         String input = "unknown ref";
         inputStream = new ByteArrayInputStream(input.getBytes());
@@ -157,7 +157,7 @@ public class UITest {
     }
 
     @Test
-    public void ifBookReturnedItIsAddedToStockAndRemovedFromReservedList() throws NoSuchMethodException {
+    public void ifBookReturnedItIsAddedToStockAndRemovedFromReservedList() {
         //given - setUp to add book to reserved list - this function has been tested above
         String input = "REF#01";
         inputStream = new ByteArrayInputStream(input.getBytes());
@@ -173,12 +173,12 @@ public class UITest {
         ui = new UI(printStream, mockScanner, optionsMenu);
         ui.returnBook();
         //then
-        assertThat(StockManager.getBooksInStock().size(), is(3));
-        assertThat(StockManager.getReservedBooks().size(), is(0));
+        assertThat(stockManager.getStock().size(), is(3));
+        assertThat(stockManager.getReservedItems().size(), is(0));
     }
 
     @Test
-    public void whenUserReturnsBookSuccessMessagePrinted() throws NoSuchMethodException {
+    public void whenUserReturnsBookSuccessMessagePrinted() {
         //given - setUp to add book to reserved list - this function has been tested above
         String input = "REF#01";
         inputStream = new ByteArrayInputStream(input.getBytes());
@@ -198,7 +198,7 @@ public class UITest {
     }
 
     @Test
-    public void ifReturnRequestUnsuccessfulUserIsNotified() throws NoSuchMethodException {
+    public void ifReturnRequestUnsuccessfulUserIsNotified() {
         //when
         String input = "unknown ref";
         inputStream = new ByteArrayInputStream(input.getBytes());

@@ -26,9 +26,11 @@ public class BibliotecaApp {
         Book hhgttg = new Book("Hitchhiker's Guide to the Galaxy", "Douglas Adams", 1992, "REF02");
         Book fMrFox = new Book("Fantastic Mr Fox", "Roald Dahl", 1970, "REF03");
 
-        StockManager.addBookToStock(catch22);
-        StockManager.addBookToStock(hhgttg);
-        StockManager.addBookToStock(fMrFox);
+        StockManager stockManager = new StockManager();
+
+        stockManager.addItemToStock(catch22);
+        stockManager.addItemToStock(hhgttg);
+        stockManager.addItemToStock(fMrFox);
 
         ui.displayWelcome();
 

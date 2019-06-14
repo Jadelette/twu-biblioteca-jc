@@ -2,11 +2,9 @@ package com.twu.biblioteca;
 
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
@@ -20,96 +18,98 @@ public class StockMangerTest {
     Book hhgttg = new Book ("Hitchhiker's Guide to the Galaxy", "Douglas Adams", 1992, "REF#02");
     Book fMrFox = new Book ("Fantastic Mr Fox", "Roald Dahl", 1970, "REF#03");
 
+    StockManager stockManager = new StockManager();
+
     @Before
     public void setUp() {
-    StockManager.clearStock();
-    StockManager.clearReservedList();
+    stockManager.clearStock();
+    stockManager.clearReservedList();
     }
 
     @Test
-    public void ifNoBooksAddedGetBooksReturnsEmptyList() {
+    public void ifNoItemsAddedGetItemsReturnsEmptyList() {
         //when
-        List<Book> books = StockManager.getBooksInStock();
+        List<StockType> books = stockManager.getStock();
         //then
         assertThat(books.isEmpty(), is(true));
     }
 
     @Test
-    public void checkThatBookCanBeAddedToStock() {
+    public void checkThatItemCanBeAddedToStock() {
         //given - setup
         //when
-        StockManager.addBookToStock(catch22);
+        stockManager.addItemToStock(catch22);
         //then
-        assertThat(StockManager.getBooksInStock(), hasItem(catch22));
+        assertThat(stockManager.getStock(), hasItem(catch22));
     }
 
     @Test
-    public void checkThatBookCanBeRemovedFromStock() {
+    public void checkThatItemCanBeRemovedFromStock() {
         //given
-        StockManager.addBookToStock(catch22);
-        StockManager.addBookToStock(fMrFox);
-        StockManager.addBookToStock(hhgttg);
-        StockManager.addBookToReservedList("REF#01");
+        stockManager.addItemToStock(catch22);
+        stockManager.addItemToStock(fMrFox);
+        stockManager.addItemToStock(hhgttg);
+        stockManager.addItemToReservedList("REF#01");
         //when
-        StockManager.removeBookFromStock("REF#01");
+        stockManager.removeItemFromStock("REF#01");
         //then - super thorough test! ^_^
-        assertThat(StockManager.getBooksInStock().size(), is(2));
-        assertThat(StockManager.getBooksInStock(), not(hasItem(catch22)));
-        assertThat(StockManager.getBooksInStock(), hasItem(fMrFox));
-        assertThat(StockManager.getBooksInStock(), hasItem(hhgttg));
+        assertThat(stockManager.getStock().size(), is(2));
+        assertThat(stockManager.getStock(), not(hasItem(catch22)));
+        assertThat(stockManager.getStock(), hasItem(fMrFox));
+        assertThat(stockManager.getStock(), hasItem(hhgttg));
     }
 
     @Test
     public void ifNoItemsReservedGetReservedMethodReturnsEmptyList() {
         //given - setUp
         //when
-        List<Book> result = StockManager.getReservedBooks();
+        List<StockType> result = stockManager.getReservedItems();
         //then
         assertThat(result.size(), is(0));
     }
 
     @Test
-    public void BookCanBeAddedToReservedBookList() {
+    public void ItemCanBeAddedToReservedList() {
         //given - setUp
-        StockManager.addBookToStock(catch22);
-        StockManager.addBookToStock(fMrFox);
-        StockManager.addBookToStock(hhgttg);
+        stockManager.addItemToStock(catch22);
+        stockManager.addItemToStock(fMrFox);
+        stockManager.addItemToStock(hhgttg);
         //when
-        StockManager.addBookToReservedList("REF#01");
+        stockManager.addItemToReservedList("REF#01");
         //then
-        assertThat(StockManager.getReservedBooks(), hasItem(catch22));
+        assertThat(stockManager.getReservedItems(), hasItem(catch22));
     }
 
     @Test
-    public void BookCanBeRemovedFromReservedList() {
+    public void ItemCanBeRemovedFromReservedList() {
         //given
-        StockManager.addBookToStock(catch22);
-        StockManager.addBookToStock(fMrFox);
-        StockManager.addBookToStock(hhgttg);
-        StockManager.addBookToReservedList("REF#01");
-        StockManager.addBookToReservedList("REF#02");
-        StockManager.addBookToReservedList("REF#03");
+        stockManager.addItemToStock(catch22);
+        stockManager.addItemToStock(fMrFox);
+        stockManager.addItemToStock(hhgttg);
+        stockManager.addItemToReservedList("REF#01");
+        stockManager.addItemToReservedList("REF#02");
+        stockManager.addItemToReservedList("REF#03");
         //when
-        StockManager.removeBookFromReservedList("REF#01");
+        stockManager.removeItemFromReservedList("REF#01");
         //then - super thorough test! ^_^
-        assertThat(StockManager.getReservedBooks().size(), is(2));
-        assertThat(StockManager.getReservedBooks(), not(hasItem(catch22)));
-        assertThat(StockManager.getReservedBooks(), hasItem(fMrFox));
-        assertThat(StockManager.getReservedBooks(), hasItem(hhgttg));
+        assertThat(stockManager.getReservedItems().size(), is(2));
+        assertThat(stockManager.getReservedItems(), not(hasItem(catch22)));
+        assertThat(stockManager.getReservedItems(), hasItem(fMrFox));
+        assertThat(stockManager.getReservedItems(), hasItem(hhgttg));
     }
 
     @Test
-    public void BookCanBeReturnedToStock() {
+    public void ItemCanBeReturnedToStock() {
         //given - setUp
-        StockManager.addBookToStock(catch22);
-        StockManager.addBookToStock(fMrFox);
-        StockManager.addBookToStock(hhgttg);
-        StockManager.addBookToReservedList("REF#01");
-        StockManager.addBookToReservedList("REF#02");
-        StockManager.addBookToReservedList("REF#03");
+        stockManager.addItemToStock(catch22);
+        stockManager.addItemToStock(fMrFox);
+        stockManager.addItemToStock(hhgttg);
+        stockManager.addItemToReservedList("REF#01");
+        stockManager.addItemToReservedList("REF#02");
+        stockManager.addItemToReservedList("REF#03");
         //when
-        StockManager.returnBookToStock("REF#01");
+        stockManager.returnItemToStock("REF#01");
         //then
-        assertThat(StockManager.getBooksInStock(), hasItem(catch22));
+        assertThat(stockManager.getStock(), hasItem(catch22));
     }
 }
