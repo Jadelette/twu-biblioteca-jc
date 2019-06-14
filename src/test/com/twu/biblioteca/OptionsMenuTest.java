@@ -20,30 +20,44 @@ public class OptionsMenuTest {
     private Scanner scanner;
     private UI ui;
     private PrintStream printStream;
+    private TreeMap<String, MenuOption> options = new TreeMap<>();
+    private BookViewer viewer;
+    private BookReserver reserver;
+    private BookReturner returner;
+
+    OptionsMenu optionsMenu = new OptionsMenu(options, scanner);
 
     @Before
-    public void setUp() throws NoSuchMethodException {
+    public void setUp() {
         scanner = new Scanner(System.in);
         printStream = mock(PrintStream.class);
-        ui = spy(new UI(printStream, scanner));
+        ui = spy(new UI(printStream, scanner, optionsMenu));
+        viewer = new BookViewer(ui);
+        reserver = new BookReserver(ui);
+        returner = new BookReturner(ui);
+
+
+        options.put("1 - View Books", viewer);
+        options.put("2 - Reserve Book", reserver);
+        options.put("3 - Return Book", returner);
     }
 
 
     @Test
-    public void checkThatGetOptionsMenuReturnsPopulatedMenu() throws NoSuchMethodException {
+    public void checkThatGetOptionsMenuReturnsPopulatedMenu() {
         //when
-        TreeMap<String, Method> result = OptionsMenu.getOptionsMenu();
+        TreeMap<String, MenuOption> result = optionsMenu.getOptionsMenu();
         //then
         assertThat(result.keySet(), hasItem("1 - View Books"));
     }
 
     @Test
-    public void checkThatSystemExitsIfUserChoosesX() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public void checkThatSystemExitsIfUserChoosesX() {
         //given a scanner input
         String input = "x";
 
         //when invokeMethod is called
-        boolean result = OptionsMenu.invokeMenuOption(ui, input);
+        boolean result = optionsMenu.invokeMenuOption(ui, input);
 
         //check that correct value is returned to stop loop in main
         assertThat(result, is(false));
@@ -52,12 +66,12 @@ public class OptionsMenuTest {
 
     @Test
     //cannot verify print statements beyond user choice/invoke method call?
-    public void checkThatSystemInvokesCorrectMethodBasedOnUserChoice() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public void checkThatSystemInvokesCorrectMethodBasedOnUserChoice() {
         //given a scanner input
         String input= "1";
 
         //when invokeMethod is called
-        OptionsMenu.invokeMenuOption(ui,input);
+        optionsMenu.invokeMenuOption(ui,input);
 
         //Then the output is as expected depending on the method/option chosen by tbe user
         verify(ui).displayBooks();

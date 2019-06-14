@@ -30,21 +30,28 @@ public class UITest {
     Book fMrFox = new Book ("Fantastic Mr Fox", "Roald Dahl", 1970, "REF#03");
 
 
-    TreeMap<String, Method> optionsMenu = new TreeMap<>();
+    private TreeMap<String, MenuOption> options = new TreeMap<>();
+    private BookViewer viewer = new BookViewer(ui);
+    private BookReserver reserver = new BookReserver(ui);
+    private BookReturner returner = new BookReturner(ui);
+
+    OptionsMenu optionsMenu = new OptionsMenu(options, mockScanner);
 
 
     @Before
-    public void setUp() throws NoSuchMethodException {
+    public void setUp() {
         printStream = mock(PrintStream.class);
         mockScanner = new Scanner(System.in);
-        ui = spy(new UI(printStream, mockScanner));
+        ui = spy(new UI(printStream, mockScanner, optionsMenu));
         StockManager.clearStock();
         StockManager.addBookToStock(catch22);
         StockManager.addBookToStock(hhgttg);
         StockManager.addBookToStock(fMrFox);
         StockManager.clearReservedList();
 
-        optionsMenu.put("1 - View Books", UI.class.getMethod("displayBooks"));
+        options.put("1 - View Books", viewer);
+        options.put("2 - Reserve Book", reserver);
+        options.put("3 - Return Book", returner);
 
     }
 
@@ -85,7 +92,7 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner);
+        ui = new UI(printStream, mockScanner, optionsMenu);
         //when
         String result = ui.getUserInput();
         //then
@@ -111,7 +118,7 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner);
+        ui = new UI(printStream, mockScanner, optionsMenu);
         ui.reserveBook();
         //then
         /** the book is added to the reserved book list **/
@@ -130,7 +137,7 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner);
+        ui = new UI(printStream, mockScanner, optionsMenu);
         ui.reserveBook();
         //then
         verify(printStream).println("Thank you! Enjoy the book!");
@@ -143,7 +150,7 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner);
+        ui = new UI(printStream, mockScanner, optionsMenu);
         ui.reserveBook();
         //then
         verify(printStream).println("Sorry, that book is not available.");
@@ -156,14 +163,14 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner);
+        ui = new UI(printStream, mockScanner, optionsMenu);
         ui.reserveBook();
         //when - the returnBook() method is called with the same reference as input
         String input2 = "REF#01";
         inputStream = new ByteArrayInputStream(input2.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner);
+        ui = new UI(printStream, mockScanner, optionsMenu);
         ui.returnBook();
         //then
         assertThat(StockManager.getBooksInStock().size(), is(3));
@@ -177,14 +184,14 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner);
+        ui = new UI(printStream, mockScanner, optionsMenu);
         ui.reserveBook();
         //when
         String input2 = "REF#01";
         inputStream = new ByteArrayInputStream(input2.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner);
+        ui = new UI(printStream, mockScanner, optionsMenu);
         ui.returnBook();
         //then
         verify(printStream).println("Thank you for returning the book!");
@@ -197,7 +204,7 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner);
+        ui = new UI(printStream, mockScanner, optionsMenu);
         ui.returnBook();
         //then
         verify(printStream).println("That is not a valid book to return.");

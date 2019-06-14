@@ -9,14 +9,14 @@ import java.util.TreeMap;
 public class UI {
 
     private PrintStream printStream;
-    TreeMap<String, Method> optionsMenu;
     private Scanner scanner;
+    private OptionsMenu optionsMenu;
 
 
-    public UI(PrintStream printStream, Scanner scanner) throws NoSuchMethodException {
+    public UI(PrintStream printStream, Scanner scanner, OptionsMenu optionsMenu) {
         this.printStream = printStream;
         this.scanner = scanner;
-        optionsMenu = OptionsMenu.getOptionsMenu();
+        this.optionsMenu = optionsMenu;
     }
 
 
@@ -34,7 +34,8 @@ public class UI {
 
     public void displayOptions()  {
         printStream.println("Menu");
-        for (String option : optionsMenu.keySet()) {
+        TreeMap<String, MenuOption> options = optionsMenu.getOptionsMenu();
+        for (String option : options.keySet()) {
         printStream.println(option + "\n");}
         printStream.println("Type the corresponding number to select a menu option, or type 'x' to exit: ");
     }
