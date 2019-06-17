@@ -26,15 +26,16 @@ public class OptionsMenuTest {
     private BookReturner returner;
 
     OptionsMenu optionsMenu = new OptionsMenu(options, scanner);
+    StockManager stockManager = new StockManager();
 
     @Before
     public void setUp() {
         scanner = new Scanner(System.in);
         printStream = mock(PrintStream.class);
         ui = spy(new UI(printStream, scanner, optionsMenu));
-        viewer = new BookViewer(ui);
-        reserver = new BookReserver(ui);
-        returner = new BookReturner(ui);
+        viewer = new BookViewer(ui, stockManager);
+        reserver = new BookReserver(ui, stockManager);
+        returner = new BookReturner(ui, stockManager);
 
 
         options.put("1 - View Books", viewer);
@@ -74,7 +75,7 @@ public class OptionsMenuTest {
         optionsMenu.invokeMenuOption(ui,input);
 
         //Then the output is as expected depending on the method/option chosen by tbe user
-        verify(ui).displayBooks();
+        verify(ui).displayBooks(stockManager);
     }
 
 }

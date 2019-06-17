@@ -1,10 +1,11 @@
 package com.twu.biblioteca;
 
+import java.util.LinkedHashMap;
+
 public interface StockType {
 
     String getRef();
-    String getAuthor();
-    String getTitle();
-    int getYear();
+
+    LinkedHashMap<String, String> getProductInfo();
 
 }

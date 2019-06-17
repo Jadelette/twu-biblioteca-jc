@@ -4,6 +4,7 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -14,9 +15,9 @@ import static org.junit.Assert.assertThat;
 
 public class StockMangerTest {
 
-    Book catch22 = new Book("Catch 22", "Joseph Heller", 1961, "REF#01");
-    Book hhgttg = new Book ("Hitchhiker's Guide to the Galaxy", "Douglas Adams", 1992, "REF#02");
-    Book fMrFox = new Book ("Fantastic Mr Fox", "Roald Dahl", 1970, "REF#03");
+    Book catch22 = new Book("Catch 22", "Joseph Heller", "1961", "REF#01");
+    Book hhgttg = new Book ("Hitchhiker's Guide to the Galaxy", "Douglas Adams", "1992", "REF#02");
+    Book fMrFox = new Book ("Fantastic Mr Fox", "Roald Dahl", "1970", "REF#03");
 
     StockManager stockManager = new StockManager();
 
@@ -29,7 +30,7 @@ public class StockMangerTest {
     @Test
     public void ifNoItemsAddedGetItemsReturnsEmptyList() {
         //when
-        List<StockType> books = stockManager.getStock();
+        ArrayList<StockType> books = stockManager.getStock();
         //then
         assertThat(books.isEmpty(), is(true));
     }

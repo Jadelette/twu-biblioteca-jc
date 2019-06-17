@@ -6,12 +6,12 @@ import java.util.List;
 
 public class StockManager {
 
-    private List<StockType> Stock = new ArrayList<>();
+    private ArrayList<StockType> Stock = new ArrayList<>();
     private List<StockType> reservedItems = new ArrayList<>();
 
     public StockManager( ) { }
 
-    public  List<StockType>getStock() {
+    public  ArrayList<StockType>getStock() {
         return Stock;
     }
 

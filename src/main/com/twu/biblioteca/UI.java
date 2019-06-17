@@ -1,22 +1,21 @@
 package com.twu.biblioteca;
 
 import java.io.PrintStream;
-import java.util.List;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 public class UI {
 
     private PrintStream printStream;
     private Scanner scanner;
     private OptionsMenu optionsMenu;
-    private StockManager stockManager = new StockManager();
+    //private StockManager stockManager;
 
 
     public UI(PrintStream printStream, Scanner scanner, OptionsMenu optionsMenu) {
         this.printStream = printStream;
         this.scanner = scanner;
         this.optionsMenu = optionsMenu;
+        //this.stockManager = stockManager;
     }
 
 
@@ -24,11 +23,15 @@ public class UI {
         printStream.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n");
     }
 
-    public void displayBooks() {
-        List<StockType> books = stockManager.getStock();
+    public void displayBooks(StockManager stockManager) {
+        ArrayList<StockType> books = stockManager.getStock();
         printStream.println("The following books are available to borrow:");
         for (StockType book : books) {
-            printStream.printf("%-10.10s %-40.40s %-30.30s  %-30.30s%n", book.getRef(), book.getTitle(), book.getAuthor(), book.getYear());
+            LinkedHashMap<String, String> productInfo = book.getProductInfo();
+            for (String infoItem : productInfo.keySet()) {
+                printStream.printf("%-40.40s", productInfo.get(infoItem));
+            }
+            System.out.println(" ");
         }
     }
 
@@ -51,7 +54,7 @@ public class UI {
         printStream.println("Thank you for using Biblioteca! We look forward to seeing you again!");
     }
 
-    public void reserveBook() {
+    public void reserveBook(StockManager stockManager) {
         printStream.println("Please type the id for the book you would like to reserve:");
         String input = getUserInput();
         try {
@@ -63,7 +66,7 @@ public class UI {
         stockManager.removeItemFromStock(input);
     }
 
-    public void returnBook() {
+    public void returnBook(StockManager stockManager) {
         printStream.println("Please type the id for the book you would like to return:");
         String input = getUserInput();
         try {
