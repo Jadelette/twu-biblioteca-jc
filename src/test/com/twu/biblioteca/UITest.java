@@ -7,7 +7,8 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
@@ -22,37 +23,40 @@ public class UITest {
     private InputStream inputStream;
     private UI ui;
     private Scanner mockScanner;
+    private UserList userList = new UserList();
 
-    Book catch22 = new Book("Catch 22", "Joseph Heller", "1961", "REF01");
-    Book hhgttg = new Book ("Hitchhiker's Guide to the Galaxy", "Douglas Adams", "1992", "REF02");
-    Book fMrFox = new Book ("Fantastic Mr Fox", "Roald Dahl", "1970", "REF03");
+    BookList bookList = new BookList();
+    List<Book> booksFromDb = bookList.getBookList();
 
-    StockManager stockManager = new StockManager();
+    StockManager bookStockManager = new StockManager();
+    StockManager movieStockManager = new StockManager();
 
     private TreeMap<String, MenuOption> options = new TreeMap<>();
-    private Viewer viewer = new Viewer(ui, stockManager);
-    private Reserver reserver = new Reserver(ui, stockManager);
-    private Returner returner = new Returner(ui, stockManager);
-
     OptionsMenu optionsMenu = new OptionsMenu(options, mockScanner);
-
-
+    OptionsList optionsList = new OptionsList(ui, bookStockManager, movieStockManager);
 
 
     @Before
     public void setUp() {
         printStream = mock(PrintStream.class);
         mockScanner = new Scanner(System.in);
-        ui = spy(new UI(printStream, mockScanner, optionsMenu));
-        stockManager.clearStock();
-        stockManager.addItemToStock(catch22);
-        stockManager.addItemToStock(hhgttg);
-        stockManager.addItemToStock(fMrFox);
-        stockManager.clearReservedList();
+        ui = spy(new UI(printStream, mockScanner, optionsMenu, userList));
+        bookStockManager.clearStock();
 
-        options.put("1 - View Books", viewer);
-        options.put("2 - Reserve Book", reserver);
-        options.put("3 - Return Book", returner);
+        //add books to stock (simulate pulling from db)
+        for (Book book : booksFromDb){
+            bookStockManager.addItemToStock(book);
+        }
+
+        bookStockManager.clearReservedList();
+
+        //populate list of menu options (simulate pulling from db)
+        TreeMap<String, MenuOption> optionsFromDB = optionsList.getOptions();
+        for (
+                Map.Entry<String, MenuOption> entry : optionsFromDB.entrySet()) {
+            String key = entry.getKey();
+            options.put(key, optionsFromDB.get(key));
+        }
 
     }
 
@@ -68,16 +72,14 @@ public class UITest {
     @Test
     public void listOfAvailableBooksDisplayedToUser(){
         //given - set-up
-        ArrayList<StockType> books = stockManager.getStock();
         // when
-        ui.displayStock(stockManager);
+        ui.displayStock(bookStockManager);
         //then
-        for (StockType book : books) {
         verify(printStream).printf("%-40.40s", "REF01");
         verify(printStream).printf("%-40.40s", "Catch 22");
         verify(printStream).printf("%-40.40s", "Joseph Heller");
         verify(printStream).printf("%-40.40s", "1961");}
-    }
+
 
     @Test
     public void menuOptionsDisplayedToUser() {
@@ -96,7 +98,7 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner, optionsMenu);
+        ui = new UI(printStream, mockScanner, optionsMenu, userList);
         //when
         String result = ui.getUserInput();
         //then
@@ -122,14 +124,14 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner, optionsMenu);
-        ui.reserveItem(stockManager);
+        ui = new UI(printStream, mockScanner, optionsMenu, userList);
+        ui.reserveItem(bookStockManager);
         //then
         // the book is added to the reserved list
-        assertThat(stockManager.getReservedItems().size(), is(1));
-        assertThat(stockManager.getReservedItems(), hasItem(catch22));
-        assertThat(stockManager.getStock().size(), is(2));
-        assertThat(stockManager.getStock(), not(hasItem(catch22)));
+        assertThat(bookStockManager.getReservedItems().size(), is(1));
+        assertThat(bookStockManager.getReservedItems(), hasItem(booksFromDb.get(0)));
+        assertThat(bookStockManager.getStock().size(), is(2));
+        assertThat(bookStockManager.getStock(), not(hasItem(booksFromDb.get(0))));
 
     }
 
@@ -141,8 +143,8 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner, optionsMenu);
-        ui.reserveItem(stockManager);
+        ui = new UI(printStream, mockScanner, optionsMenu, userList);
+        ui.reserveItem(bookStockManager);
         //then
         verify(printStream).println("Thank you! Enjoy the book!");
     }
@@ -154,8 +156,8 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner, optionsMenu);
-        ui.reserveItem(stockManager);
+        ui = new UI(printStream, mockScanner, optionsMenu, userList);
+        ui.reserveItem(bookStockManager);
         //then
         verify(printStream).println("Sorry, that book is not available.");
     }
@@ -167,18 +169,18 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner, optionsMenu);
-        ui.reserveItem(stockManager);
+        ui = new UI(printStream, mockScanner, optionsMenu, userList);
+        ui.reserveItem(bookStockManager);
         //when - the returnItem() method is called with the same reference as input
         String input2 = "REF01";
         inputStream = new ByteArrayInputStream(input2.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner, optionsMenu);
-        ui.returnItem(stockManager);
+        ui = new UI(printStream, mockScanner, optionsMenu, userList);
+        ui.returnItem(bookStockManager);
         //then
-        assertThat(stockManager.getStock().size(), is(3));
-        assertThat(stockManager.getReservedItems().size(), is(0));
+        assertThat(bookStockManager.getStock().size(), is(3));
+        assertThat(bookStockManager.getReservedItems().size(), is(0));
     }
 
     @Test
@@ -188,15 +190,15 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner, optionsMenu);
-        ui.reserveItem(stockManager);
+        ui = new UI(printStream, mockScanner, optionsMenu, userList);
+        ui.reserveItem(bookStockManager);
         //when
         String input2 = "REF01";
         inputStream = new ByteArrayInputStream(input2.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner, optionsMenu);
-        ui.returnItem(stockManager);
+        ui = new UI(printStream, mockScanner, optionsMenu, userList);
+        ui.returnItem(bookStockManager);
         //then
         verify(printStream).println("Thank you for returning the book!");
     }
@@ -208,11 +210,21 @@ public class UITest {
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         mockScanner = new Scanner(System.in);
-        ui = new UI(printStream, mockScanner, optionsMenu);
-        ui.returnItem(stockManager);
+        ui = new UI(printStream, mockScanner, optionsMenu, userList);
+        ui.returnItem(bookStockManager);
         //then
         verify(printStream).println("That is not a valid book to return.");
     }
+
+    @Test
+    public void userPasswordCanBeReturnedBasedOnReferenceNumber() {
+        String input = "123-4567";
+
+        String result = ui.getPasswordUsingRefNumber(input);
+        //then
+        assertThat(result, is ("password1"));
+    }
+
 
 
 }

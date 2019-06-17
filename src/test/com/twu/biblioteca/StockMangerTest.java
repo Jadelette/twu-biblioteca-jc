@@ -15,9 +15,9 @@ import static org.junit.Assert.assertThat;
 
 public class StockMangerTest {
 
-    Book catch22 = new Book("Catch 22", "Joseph Heller", "1961", "REF#01");
-    Book hhgttg = new Book ("Hitchhiker's Guide to the Galaxy", "Douglas Adams", "1992", "REF#02");
-    Book fMrFox = new Book ("Fantastic Mr Fox", "Roald Dahl", "1970", "REF#03");
+    Book catch22 = new Book("Catch 22", "Joseph Heller", "1961", "REF01");
+    Book hhgttg = new Book ("Hitchhiker's Guide to the Galaxy", "Douglas Adams", "1992", "REF02");
+    Book fMrFox = new Book ("Fantastic Mr Fox", "Roald Dahl", "1970", "REF03");
 
     StockManager stockManager = new StockManager();
 
@@ -50,9 +50,9 @@ public class StockMangerTest {
         stockManager.addItemToStock(catch22);
         stockManager.addItemToStock(fMrFox);
         stockManager.addItemToStock(hhgttg);
-        stockManager.addItemToReservedList("REF#01");
+        stockManager.addItemToReservedList("REF01");
         //when
-        stockManager.removeItemFromStock("REF#01");
+        stockManager.removeItemFromStock("REF01");
         //then - super thorough test! ^_^
         assertThat(stockManager.getStock().size(), is(2));
         assertThat(stockManager.getStock(), not(hasItem(catch22)));
@@ -76,7 +76,7 @@ public class StockMangerTest {
         stockManager.addItemToStock(fMrFox);
         stockManager.addItemToStock(hhgttg);
         //when
-        stockManager.addItemToReservedList("REF#01");
+        stockManager.addItemToReservedList("REF01");
         //then
         assertThat(stockManager.getReservedItems(), hasItem(catch22));
     }
@@ -87,11 +87,11 @@ public class StockMangerTest {
         stockManager.addItemToStock(catch22);
         stockManager.addItemToStock(fMrFox);
         stockManager.addItemToStock(hhgttg);
-        stockManager.addItemToReservedList("REF#01");
-        stockManager.addItemToReservedList("REF#02");
-        stockManager.addItemToReservedList("REF#03");
+        stockManager.addItemToReservedList("REF01");
+        stockManager.addItemToReservedList("REF02");
+        stockManager.addItemToReservedList("REF03");
         //when
-        stockManager.removeItemFromReservedList("REF#01");
+        stockManager.removeItemFromReservedList("REF01");
         //then - super thorough test! ^_^
         assertThat(stockManager.getReservedItems().size(), is(2));
         assertThat(stockManager.getReservedItems(), not(hasItem(catch22)));
@@ -105,11 +105,11 @@ public class StockMangerTest {
         stockManager.addItemToStock(catch22);
         stockManager.addItemToStock(fMrFox);
         stockManager.addItemToStock(hhgttg);
-        stockManager.addItemToReservedList("REF#01");
-        stockManager.addItemToReservedList("REF#02");
-        stockManager.addItemToReservedList("REF#03");
+        stockManager.addItemToReservedList("REF01");
+        stockManager.addItemToReservedList("REF02");
+        stockManager.addItemToReservedList("REF03");
         //when
-        stockManager.returnItemToStock("REF#01");
+        stockManager.returnItemToStock("REF01");
         //then
         assertThat(stockManager.getStock(), hasItem(catch22));
     }

@@ -1,30 +1,25 @@
 package com.twu.biblioteca;
 
-import apple.laf.JRSUIUtils;
-
-import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 class OptionsMenu {
 
-    private  TreeMap<String, MenuOption> optionsMenu;
+    private  TreeMap<String, MenuOption> options;
     private  Scanner scanner;
 
 
     public OptionsMenu(TreeMap<String, MenuOption> menu, Scanner scanner) {
         this.scanner = scanner;
-        this.optionsMenu = menu;
+        this.options = menu;
     }
 
 
-    public TreeMap<String, MenuOption> getOptionsMenu() {
-        return optionsMenu;
+    public TreeMap<String, MenuOption> getOptions() {
+        return options;
     }
 
     public ArrayList<String> generateListOfMenuNumbers() {
-        Set<String> options = optionsMenu.keySet();
+        Set<String> options = this.options.keySet();
         ArrayList<String> optionNumbers = new ArrayList<>();
         for (String option : options) {
             char temp = option.charAt(0);
@@ -42,10 +37,10 @@ class OptionsMenu {
                 exit.execute();
                 proceed = false;
             } else if (optionNumbers.contains(input)) {
-                for (Map.Entry<String, MenuOption> entry : optionsMenu.entrySet()) {
+                for (Map.Entry<String, MenuOption> entry : options.entrySet()) {
                     if (entry.getKey().contains(input)) {
                         String cmd = entry.getKey();
-                        MenuOption option = optionsMenu.get(cmd);
+                        MenuOption option = options.get(cmd);
                         option.execute();
                     }
                 }

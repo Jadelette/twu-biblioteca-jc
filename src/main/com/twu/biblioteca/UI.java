@@ -1,5 +1,7 @@
 package com.twu.biblioteca;
 
+import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
+
 import java.io.PrintStream;
 import java.util.*;
 
@@ -8,14 +10,15 @@ public class UI {
     private PrintStream printStream;
     private Scanner scanner;
     private OptionsMenu optionsMenu;
-    //private StockManager stockManager;
+    private UserList userList;
 
 
-    public UI(PrintStream printStream, Scanner scanner, OptionsMenu optionsMenu) {
+    public UI(PrintStream printStream, Scanner scanner, OptionsMenu optionsMenu, UserList userList) {
         this.printStream = printStream;
         this.scanner = scanner;
         this.optionsMenu = optionsMenu;
-        //this.stockManager = stockManager;
+        this.userList = userList;
+
     }
 
 
@@ -37,7 +40,7 @@ public class UI {
 
     public void displayOptions()  {
         printStream.println("Menu");
-        TreeMap<String, MenuOption> options = optionsMenu.getOptionsMenu();
+        TreeMap<String, MenuOption> options = optionsMenu.getOptions();
         for (String option : options.keySet()) {
         printStream.println(option + "\n");}
         printStream.println("Type the corresponding number to select a menu option, or type 'x' to exit: ");
@@ -80,7 +83,18 @@ public class UI {
         stockManager.removeItemFromReservedList(input);
     }
 
-
+    //possible security concern but left in for testing
+    String getPasswordUsingRefNumber(String input) {
+        String password = null;
+        HashMap<String, String> users = userList.getUserReferenceAndPassword();
+        try {
+            password = users.get(input);
+         }
+        catch (Exception e) {
+            System.out.println("Library Reference Number Not Recognised");
+        }
+        return password;
+    }
 }
 
 

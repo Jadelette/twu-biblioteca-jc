@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.PrintStream;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
@@ -19,33 +20,32 @@ public class OptionsMenuTest {
     private UI ui;
     private PrintStream printStream;
     private TreeMap<String, MenuOption> options = new TreeMap<>();
-    private Viewer viewer;
-    private Reserver reserver;
-    private Returner returner;
+    private UserList userList = new UserList();
 
     OptionsMenu optionsMenu = new OptionsMenu(options, scanner);
-    StockManager stockManager = new StockManager();
+    StockManager bookStockManager = new StockManager();
+    StockManager movieStockManager = new StockManager();
+
 
     @Before
     public void setUp() {
         scanner = new Scanner(System.in);
         printStream = mock(PrintStream.class);
-        ui = spy(new UI(printStream, scanner, optionsMenu));
-        viewer = new Viewer(ui, stockManager);
-        reserver = new Reserver(ui, stockManager);
-        returner = new Returner(ui, stockManager);
+        ui = spy(new UI(printStream, scanner, optionsMenu, userList));
+        OptionsList optionsList = new OptionsList(ui, bookStockManager, movieStockManager);
+        TreeMap<String, MenuOption> optionsFromDB = optionsList.getOptions();
+        for (Map.Entry<String, MenuOption> entry : optionsFromDB.entrySet()) {
+            String key = entry.getKey();
+            options.put(key, optionsFromDB.get(key));
+        }
 
-
-        options.put("1 - View Books", viewer);
-        options.put("2 - Reserve Book", reserver);
-        options.put("3 - Return Book", returner);
     }
 
 
     @Test
     public void checkThatGetOptionsMenuReturnsPopulatedMenu() {
         //when
-        TreeMap<String, MenuOption> result = optionsMenu.getOptionsMenu();
+        TreeMap<String, MenuOption> result = optionsMenu.getOptions();
         //then
         assertThat(result.keySet(), hasItem("1 - View Books"));
     }
@@ -73,7 +73,7 @@ public class OptionsMenuTest {
         optionsMenu.invokeMenuOption(ui,input);
 
         //Then the output is as expected depending on the method/option chosen by tbe user
-        verify(ui).displayStock(stockManager);
+        verify(ui).displayStock(bookStockManager);
     }
 
 }
