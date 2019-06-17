@@ -42,7 +42,7 @@ public class UI {
         printStream.println("Menu");
         TreeMap<String, MenuOption> options = optionsMenu.getOptions();
         for (String option : options.keySet()) {
-        printStream.println(option + "\n");}
+        printStream.printf(option + "\n");}
         printStream.println("Type the corresponding number to select a menu option, or type 'x' to exit: ");
     }
 
@@ -58,16 +58,16 @@ public class UI {
     }
 
     public void reserveItem(StockManager stockManager) {
-        String type = stockManager.determineStockType();
-        printStream.println("Please type the id for the " + type + " you would like to reserve:");
-        String input = getUserInput();
-        try {
-        stockManager.addItemToReservedList(input);
-        printStream.println("Thank you! Enjoy the " + type +"!");}
-        catch (Exception e) {
-            printStream.println("Sorry, that " + type + " is not available.");
-        }
-        stockManager.removeItemFromStock(input);
+            String type = stockManager.determineStockType();
+            printStream.println("Please type the id for the " + type + " you would like to reserve:");
+            String input = getUserInput();
+            try {
+                stockManager.addItemToReservedList(input);
+                printStream.println("Thank you! Enjoy the " + type + "!");
+            } catch (Exception e) {
+                printStream.println("Sorry, that " + type + " is not available.");
+            }
+            stockManager.removeItemFromStock(input);
     }
 
     public void returnItem(StockManager stockManager) {
@@ -85,16 +85,37 @@ public class UI {
 
     //possible security concern but left in for testing
     String getPasswordUsingRefNumber(String input) {
-        String password = null;
+        String password = "empty";
         HashMap<String, String> users = userList.getUserReferenceAndPassword();
-        try {
+        if (users.keySet().contains(input)){
             password = users.get(input);
          }
-        catch (Exception e) {
-            System.out.println("Library Reference Number Not Recognised");
+        else {
+            printStream.println("Library Reference Number Not Recognised");
         }
         return password;
     }
+
+    boolean checkUserLogin() {
+        printStream.println("Please enter your library reference number:");
+        String reference = getUserInput();
+        String expectedPassword = getPasswordUsingRefNumber(reference);
+        if (expectedPassword.equals("empty")) {
+            return false;
+        } else {
+            printStream.println("Please enter your password");
+            String input = getUserInput();
+            if (input.equals(expectedPassword)) {
+                return true;
+            } else {
+                printStream.println("Password not recognised");
+                return false;
+            }
+        }
+    }
+
+
+
 }
 
 

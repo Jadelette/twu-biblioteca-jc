@@ -18,12 +18,15 @@ public class OptionsList {
         Returner movieReturner = new Returner(ui, movieStockManager);
 
 
-        options.put("1 - View Books", bookViewer);
-        options.put("2 - Reserve Book", bookReserver);
-        options.put("3 - Return Book", bookReturner);
-        options.put("4 - View Movies", movieViewer);
-        options.put("5 - Reserve Movie", movieReserver);
-        options.put("6 - Return Movie", movieReturner);
+        options.put("1 - View Available Books", bookViewer);
+        options.put("2 - View My Books", bookViewer);
+        options.put("3 - Reserve Book", bookReserver);
+        options.put("4 - Return Book", bookReturner);
+        options.put("5 - View Available Movies", movieViewer);
+        options.put("6 - View My Movies", movieViewer);
+        options.put("7 - Reserve Movie", movieReserver);
+        options.put("8 - Return Movie", movieReturner);
+        options.put("9 - View My Profile", movieViewer);
     }
 
     public TreeMap<String, MenuOption> getOptions() {

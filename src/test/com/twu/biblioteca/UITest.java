@@ -84,11 +84,11 @@ public class UITest {
     @Test
     public void menuOptionsDisplayedToUser() {
         //given - set-up
-        String result = "1 - View Books\n";
+        String result = "1 - View Available Books\n";
         //when
         ui.displayOptions();
         //then
-        verify(printStream).println(result);
+        verify(printStream).printf(result);
     }
 
     @Test
@@ -223,6 +223,15 @@ public class UITest {
         String result = ui.getPasswordUsingRefNumber(input);
         //then
         assertThat(result, is ("password1"));
+    }
+
+    @Test
+    public void errorMessageDisplayedForIncorrectReferenceNumber() {
+        String input = "923-4568";
+
+        ui.getPasswordUsingRefNumber(input);
+        //then
+        verify(printStream).println("Library Reference Number Not Recognised");
     }
 
 

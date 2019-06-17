@@ -41,7 +41,13 @@ public class BibliotecaApp {
         //actual main method
         ui.displayWelcome();
 
+        boolean loggedIn = false;
+        while (loggedIn == false){
+        loggedIn = ui.checkUserLogin();}
+
         ui.displayOptions();
+
+
 
         boolean proceed = true;
         while (proceed == true) {

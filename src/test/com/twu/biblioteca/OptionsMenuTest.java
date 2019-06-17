@@ -47,7 +47,7 @@ public class OptionsMenuTest {
         //when
         TreeMap<String, MenuOption> result = optionsMenu.getOptions();
         //then
-        assertThat(result.keySet(), hasItem("1 - View Books"));
+        assertThat(result.keySet(), hasItem("1 - View Available Books"));
     }
 
     @Test
