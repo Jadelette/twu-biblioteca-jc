@@ -23,11 +23,11 @@ public class UI {
         printStream.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n");
     }
 
-    public void displayBooks(StockManager stockManager) {
-        ArrayList<StockType> books = stockManager.getStock();
+    public void displayStock(StockManager stockManager) {
+        ArrayList<StockType> stockList = stockManager.getStock();
         printStream.println("The following books are available to borrow:");
-        for (StockType book : books) {
-            LinkedHashMap<String, String> productInfo = book.getProductInfo();
+        for (StockType item : stockList) {
+            LinkedHashMap<String, String> productInfo = item.getProductInfo();
             for (String infoItem : productInfo.keySet()) {
                 printStream.printf("%-40.40s", productInfo.get(infoItem));
             }
@@ -54,29 +54,32 @@ public class UI {
         printStream.println("Thank you for using Biblioteca! We look forward to seeing you again!");
     }
 
-    public void reserveBook(StockManager stockManager) {
-        printStream.println("Please type the id for the book you would like to reserve:");
+    public void reserveItem(StockManager stockManager) {
+        String type = stockManager.determineStockType();
+        printStream.println("Please type the id for the " + type + " you would like to reserve:");
         String input = getUserInput();
         try {
         stockManager.addItemToReservedList(input);
-        printStream.println("Thank you! Enjoy the book!");}
+        printStream.println("Thank you! Enjoy the " + type +"!");}
         catch (Exception e) {
-            printStream.println("Sorry, that book is not available.");
+            printStream.println("Sorry, that " + type + " is not available.");
         }
         stockManager.removeItemFromStock(input);
     }
 
-    public void returnBook(StockManager stockManager) {
-        printStream.println("Please type the id for the book you would like to return:");
+    public void returnItem(StockManager stockManager) {
+        String type = stockManager.determineStockType();
+        printStream.println("Please type the id for the " + type + " you would like to return:");
         String input = getUserInput();
         try {
             stockManager.returnItemToStock(input);
-            printStream.println("Thank you for returning the book!");}
+            printStream.println("Thank you for returning the " + type + "!");}
         catch (Exception e) {
-            printStream.println("That is not a valid book to return.");
+            printStream.println("That is not a valid " + type + " to return.");
         }
         stockManager.removeItemFromReservedList(input);
     }
+
 
 }
 

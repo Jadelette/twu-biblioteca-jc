@@ -6,23 +6,23 @@ import java.util.List;
 
 public class StockManager {
 
-    private ArrayList<StockType> Stock = new ArrayList<>();
+    private ArrayList<StockType> stock = new ArrayList<>();
     private List<StockType> reservedItems = new ArrayList<>();
 
     public StockManager( ) { }
 
     public  ArrayList<StockType>getStock() {
-        return Stock;
+        return stock;
     }
 
     public  void addItemToStock(StockType item) {
-        Stock.add(item);
+        stock.add(item);
     }
 
     public  void removeItemFromStock(String ref) {
         for (StockType item : reservedItems) {
             if (item.getRef().contains(ref)){
-                Stock.remove(item);
+                stock.remove(item);
             }
         }
     }
@@ -33,7 +33,7 @@ public class StockManager {
 
     public void addItemToReservedList(String ref){
         StockType itemToReserve = null;
-        for (StockType item : Stock) {
+        for (StockType item : stock) {
             if (item.getRef().equals(ref)) {
                 itemToReserve = item;
             }
@@ -45,7 +45,7 @@ public class StockManager {
     }
 
     public void removeItemFromReservedList(String ref) {
-        for (StockType item : Stock) {
+        for (StockType item : stock) {
             if (item.getRef().contains(ref)){
                 reservedItems.remove(item);
             }
@@ -61,13 +61,19 @@ public class StockManager {
         }
         if (itemToReturn == null) {throw new InputMismatchException();
         } else {
-            Stock.add(itemToReturn);
+            stock.add(itemToReturn);
         }
+    }
+
+    public String determineStockType(){
+        StockType item = stock.get(0);
+        String type = item.getType();
+        return type;
     }
 
 
     public void clearStock() {
-        Stock = new ArrayList<>();
+        stock = new ArrayList<>();
     }
 
     public void clearReservedList() {

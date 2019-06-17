@@ -5,8 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Scanner;
 import java.util.TreeMap;
 
@@ -21,9 +19,9 @@ public class OptionsMenuTest {
     private UI ui;
     private PrintStream printStream;
     private TreeMap<String, MenuOption> options = new TreeMap<>();
-    private BookViewer viewer;
-    private BookReserver reserver;
-    private BookReturner returner;
+    private Viewer viewer;
+    private Reserver reserver;
+    private Returner returner;
 
     OptionsMenu optionsMenu = new OptionsMenu(options, scanner);
     StockManager stockManager = new StockManager();
@@ -33,9 +31,9 @@ public class OptionsMenuTest {
         scanner = new Scanner(System.in);
         printStream = mock(PrintStream.class);
         ui = spy(new UI(printStream, scanner, optionsMenu));
-        viewer = new BookViewer(ui, stockManager);
-        reserver = new BookReserver(ui, stockManager);
-        returner = new BookReturner(ui, stockManager);
+        viewer = new Viewer(ui, stockManager);
+        reserver = new Reserver(ui, stockManager);
+        returner = new Returner(ui, stockManager);
 
 
         options.put("1 - View Books", viewer);
@@ -75,7 +73,7 @@ public class OptionsMenuTest {
         optionsMenu.invokeMenuOption(ui,input);
 
         //Then the output is as expected depending on the method/option chosen by tbe user
-        verify(ui).displayBooks(stockManager);
+        verify(ui).displayStock(stockManager);
     }
 
 }

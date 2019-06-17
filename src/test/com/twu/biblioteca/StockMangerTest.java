@@ -113,4 +113,16 @@ public class StockMangerTest {
         //then
         assertThat(stockManager.getStock(), hasItem(catch22));
     }
+
+    @Test
+    public void typeOfStockCanBeDetermined() {
+        //given
+        stockManager.addItemToStock(catch22);
+        stockManager.addItemToStock(fMrFox);
+        stockManager.addItemToStock(hhgttg);
+        //when
+        String result = stockManager.determineStockType();
+        //then
+        assertThat(result, is("book"));
+    }
 }
